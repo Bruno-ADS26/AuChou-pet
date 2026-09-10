@@ -23,62 +23,62 @@
                             700: '#ad5034'
                         },
                         secondary: '#3d405b',
-                        accent: '#81b29a'
+                        accent: '#81b29a',
+                        orkutBg: '#f2f5f9',
+                        orkutCard: '#ffffff',
+                        orkutHeader: '#af2a66'
                     }
                 }
             }
         }
     </script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', sans-serif; background-color: #f2f5f9; }
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #aaa; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col justify-between">
+<body class="text-gray-800 min-h-screen flex flex-col justify-between">
 
-    <header class="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <header class="bg-gradient-to-r from-secondary to-brand-700 text-white shadow-md sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
             <!-- Logo -->
             <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('feed')">
-                <div class="w-10 h-10 rounded-xl bg-brand-500 flex items-center justify-center text-white text-xl shadow-md">
+                <div class="w-8 h-8 rounded-lg bg-white text-brand-600 flex items-center justify-center font-bold text-lg shadow">
                     <i class="fa-solid fa-paw"></i>
                 </div>
-                <div>
-                    <h1 class="text-xl font-bold text-gray-900 tracking-tight">AuChou</h1>
-                    <p class="text-xs text-gray-500">Rede Social de Pets</p>
-                </div>
+                <h1 class="text-lg font-bold tracking-tight">AuChou</h1>
             </div>
 
-            <!-- Search in Header (Desktop) -->
-            <div class="hidden md:flex items-center flex-1 max-w-md mx-8">
+            <!-- Search Header -->
+            <div class="hidden md:flex items-center flex-1 max-w-sm mx-6">
                 <div class="relative w-full">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <i class="fa-solid fa-magnifying-glass text-xs"></i>
                     </span>
-                    <input type="text" id="global-search-input" oninput="handleGlobalSearch(this.value)" placeholder="Pesquisar por raça, nome, cor ou local..." class="w-full pl-10 pr-4 py-2 bg-gray-100 border border-transparent rounded-full text-sm focus:outline-none focus:bg-white focus:border-brand-500 transition">
+                    <input type="text" id="global-search-input" oninput="handleGlobalSearch(this.value)" placeholder="pesquisar no auchou..." class="w-full pl-9 pr-3 py-1 bg-white text-gray-800 rounded text-xs focus:outline-none">
                 </div>
             </div>
 
-            <!-- Right Navigation Actions -->
-            <div class="flex items-center space-x-3" id="nav-actions">
-                <!-- Dynamically rendered based on auth state -->
+            <!-- Right Actions -->
+            <div class="flex items-center space-x-4 text-xs font-medium" id="nav-actions">
+                <!-- Injected dynamically -->
             </div>
         </div>
     </header>
 
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <!-- Visitor Banner if not logged in -->
-        <div id="visitor-banner" class="hidden bg-gradient-to-r from-brand-500 to-amber-600 rounded-2xl p-6 text-white mb-6 shadow-md flex flex-col md:flex-row items-center justify-between">
+        <div id="visitor-banner" class="hidden bg-white rounded-xl p-6 text-gray-800 mb-6 shadow-sm border border-gray-200 flex flex-col md:flex-row items-center justify-between">
             <div class="mb-4 md:mb-0">
-                <h2 class="text-2xl font-bold mb-1">Novo por aqui ou quer interagir?</h2>
-                <p class="text-brand-100 text-sm">Cadastre-se ou entre com sua conta pessoal para curtir, comentar, publicar alertas e conversar com tutores.</p>
+                <h2 class="text-xl font-bold text-gray-900 mb-1">Novo por aqui ou quer interagir?</h2>
+                <p class="text-gray-600 text-xs">Cadastre-se ou entre com sua conta pessoal para curtir, comentar e conversar.</p>
             </div>
             <div class="flex space-x-3">
-                <button onclick="openAuthModal('login')" class="bg-white text-brand-600 px-5 py-2.5 rounded-xl font-medium text-sm shadow hover:bg-brand-50 transition">Entrar</button>
-                <button onclick="openAuthModal('register')" class="bg-secondary text-white px-5 py-2.5 rounded-xl font-medium text-sm shadow hover:bg-opacity-90 transition">Cadastre-se</button>
+                <button onclick="openAuthModal('login')" class="bg-brand-500 text-white px-5 py-2 rounded-lg font-medium text-xs shadow hover:bg-brand-600 transition">Entrar</button>
+                <button onclick="openAuthModal('register')" class="bg-gray-100 text-gray-800 px-5 py-2 rounded-lg font-medium text-xs border border-gray-300 hover:bg-gray-200 transition">Cadastre-se</button>
             </div>
         </div>
 
@@ -88,9 +88,9 @@
         </div>
     </main>
 
-    <footer class="bg-white border-t border-gray-200 mt-12 py-6 text-center text-sm text-gray-500">
+    <footer class="bg-white border-t border-gray-200 mt-12 py-4 text-center text-xs text-gray-500">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p>&copy; 2026 AuChou Pet. Todos os direitos reservados. Plataforma acadêmica de apoio a resgates.</p>
+            <p>&copy; 2026 AuChou Pet. Todos os direitos reservados. Rede Social Acadêmica.</p>
             <div class="flex space-x-6">
                 <a href="#" onclick="showAboutModal(); return false;" class="hover:text-brand-600 transition">Sobre o Projeto</a>
                 <a href="#" onclick="showPrivacyModal(); return false;" class="hover:text-brand-600 transition">Privacidade e Segurança</a>
@@ -99,9 +99,8 @@
     </footer>
 
 
-    <!-- Auth Modal (Login / Register) -->
     <div id="modal-auth" class="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative transform transition-all">
+        <div class="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl relative transform transition-all">
             <button onclick="closeModal('modal-auth')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
@@ -116,21 +115,21 @@
             <form id="auth-form" onsubmit="handleAuthSubmit(event)">
                 <div id="auth-name-field" class="mb-4 hidden">
                     <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Nome Completo</label>
-                    <input type="text" id="auth-name" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-brand-500">
+                    <input type="text" id="auth-name" class="w-full px-3 py-2 border border-gray-300 rounded text-xs focus:outline-none focus:border-brand-500">
                 </div>
                 <div class="mb-4">
                     <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">E-mail</label>
-                    <input type="email" id="auth-email" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-brand-500" placeholder="seu@email.com">
+                    <input type="email" id="auth-email" required class="w-full px-3 py-2 border border-gray-300 rounded text-xs focus:outline-none focus:border-brand-500" placeholder="seu@email.com">
                 </div>
                 <div class="mb-4">
                     <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Senha</label>
-                    <input type="password" id="auth-password" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-brand-500" placeholder="••••••••">
-                    <p id="password-hint" class="text-[11px] text-gray-500 mt-1 hidden">Mínimo 8 caracteres, 1 letra maiúscula e 1 caractere especial.</p>
+                    <input type="password" id="auth-password" required class="w-full px-3 py-2 border border-gray-300 rounded text-xs focus:outline-none focus:border-brand-500" placeholder="••••••••">
+                    <p id="password-hint" class="text-[11px] text-gray-500 mt-1 hidden">Mínimo 8 caracteres, 1 letra maiúscula e 1 caractere especial (!@#$%...).</p>
                 </div>
                 
-                <div id="auth-error-msg" class="mb-4 p-3 bg-red-50 text-red-700 text-xs rounded-lg hidden"></div>
+                <div id="auth-error-msg" class="mb-4 p-3 bg-red-50 text-red-700 text-xs rounded hidden"></div>
 
-                <button type="submit" id="auth-submit-btn" class="w-full bg-brand-500 text-white font-medium py-2.5 rounded-lg hover:bg-brand-600 transition shadow">Entrar</button>
+                <button type="submit" id="auth-submit-btn" class="w-full bg-brand-500 text-white font-medium py-2 rounded text-xs hover:bg-brand-600 transition shadow">Entrar</button>
             </form>
 
             <div class="mt-4 text-center">
@@ -144,9 +143,8 @@
         </div>
     </div>
 
-    <!-- Forgot Password Modal -->
     <div id="modal-forgot" class="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+        <div class="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl relative">
             <button onclick="closeModal('modal-forgot')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
@@ -154,31 +152,46 @@
                 <div class="w-12 h-12 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center mx-auto mb-2 text-xl">
                     <i class="fa-solid fa-key"></i>
                 </div>
-                <h3 class="text-xl font-bold text-gray-900">Redefinir Senha</h3>
-                <p class="text-xs text-gray-500 mt-1">Informe seu e-mail cadastrado e defina uma nova senha segura</p>
+                <h3 class="text-xl font-bold text-gray-900">Recuperação de Senha Segura</h3>
+                <p id="forgot-subtitle" class="text-xs text-gray-500 mt-1">Informe seu e-mail cadastrado para receber o código de confirmação</p>
             </div>
 
-            <form id="forgot-form" onsubmit="handleForgotPasswordSubmit(event)">
+            <!-- Step 1: Request Code -->
+            <form id="forgot-step1-form" onsubmit="handleRequestResetCode(event)">
                 <div class="mb-4">
                     <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">E-mail Cadastrado</label>
-                    <input type="email" id="forgot-email" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-brand-500" placeholder="seu@email.com">
+                    <input type="email" id="forgot-email" required class="w-full px-3 py-2 border border-gray-300 rounded text-xs focus:outline-none focus:border-brand-500" placeholder="seu@email.com">
+                </div>
+                <div id="forgot-error-msg-1" class="mb-4 p-3 bg-red-50 text-red-700 text-xs rounded hidden"></div>
+                <button type="submit" class="w-full bg-brand-500 text-white font-medium py-2 rounded text-xs hover:bg-brand-600 transition shadow">Enviar Código de Confirmação</button>
+            </form>
+
+            <!-- Step 2: Verify Code & Set New Password -->
+            <form id="forgot-step2-form" onsubmit="handleVerifyAndResetPassword(event)" class="hidden">
+                <div class="mb-3 p-3 bg-brand-50 text-brand-700 rounded text-xs" id="code-sent-notice">
+                    Código de 6 dígitos enviado por e-mail simulado.
+                </div>
+                <div class="mb-4">
+                    <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Código de Confirmação (6 Dígitos)</label>
+                    <input type="text" id="forgot-code" maxlength="6" required class="w-full px-3 py-2 border border-gray-300 rounded text-center tracking-widest font-mono text-sm focus:outline-none focus:border-brand-500" placeholder="000000">
                 </div>
                 <div class="mb-4">
                     <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Nova Senha</label>
-                    <input type="password" id="forgot-new-password" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-brand-500" placeholder="Mín. 8 caracteres, 1 maiúscula, 1 símbolo">
+                    <input type="password" id="forgot-new-password" required class="w-full px-3 py-2 border border-gray-300 rounded text-xs focus:outline-none focus:border-brand-500" placeholder="Mín. 8 caracteres, 1 maiúscula, 1 especial">
+                    <p class="text-[11px] text-gray-500 mt-1">Ex: Senha@123</p>
                 </div>
-                <div id="forgot-error-msg" class="mb-4 p-3 bg-red-50 text-red-700 text-xs rounded-lg hidden"></div>
-                <button type="submit" class="w-full bg-brand-500 text-white font-medium py-2.5 rounded-lg hover:bg-brand-600 transition shadow">Redefinir Senha</button>
+                <div id="forgot-error-msg-2" class="mb-4 p-3 bg-red-50 text-red-700 text-xs rounded hidden"></div>
+                <button type="submit" class="w-full bg-brand-500 text-white font-medium py-2 rounded text-xs hover:bg-brand-600 transition shadow">Redefinir Senha com Segurança</button>
             </form>
+
             <div class="mt-4 text-center">
                 <a href="#" onclick="backToLoginFromForgot(); return false;" class="text-xs text-brand-600 font-semibold hover:underline">Voltar para o login</a>
             </div>
         </div>
     </div>
 
-    <!-- Create / Edit Post Modal -->
     <div id="modal-post" class="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden overflow-y-auto">
-        <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl relative my-8">
+        <div class="bg-white rounded-xl max-w-xl w-full p-6 shadow-2xl relative my-8">
             <button onclick="closeModal('modal-post')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
@@ -189,7 +202,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div>
                         <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Categoria / Tipo de Alerta</label>
-                        <select id="post-category" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:border-brand-500">
+                        <select id="post-category" required class="w-full px-3 py-2 border border-gray-300 rounded text-xs bg-white focus:outline-none focus:border-brand-500">
                             <option value="Cão Perdido">Cão Perdido</option>
                             <option value="Cão Achado">Cão Achado</option>
                             <option value="Gato Perdido">Gato Perdido</option>
@@ -200,14 +213,14 @@
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Nome do Pet (se conhecido)</label>
-                        <input type="text" id="post-pet-name" placeholder="Ex: Mel, Thor, Desconhecido" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-brand-500">
+                        <input type="text" id="post-pet-name" placeholder="Ex: Mel, Thor, Desconhecido" class="w-full px-3 py-2 border border-gray-300 rounded text-xs focus:outline-none focus:border-brand-500">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
                     <div>
                         <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Espécie</label>
-                        <select id="post-species" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:border-brand-500">
+                        <select id="post-species" required class="w-full px-3 py-2 border border-gray-300 rounded text-xs bg-white focus:outline-none focus:border-brand-500">
                             <option value="Cão">Cão</option>
                             <option value="Gato">Gato</option>
                             <option value="Outro">Outro</option>
@@ -215,11 +228,11 @@
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Raça</label>
-                        <input type="text" id="post-breed" required placeholder="Ex: Poodle, SRD" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-brand-500">
+                        <input type="text" id="post-breed" required placeholder="Ex: Poodle, SRD" class="w-full px-3 py-2 border border-gray-300 rounded text-xs focus:outline-none focus:border-brand-500">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Porte</label>
-                        <select id="post-size" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:border-brand-500">
+                        <select id="post-size" required class="w-full px-3 py-2 border border-gray-300 rounded text-xs bg-white focus:outline-none focus:border-brand-500">
                             <option value="Pequeno">Pequeno</option>
                             <option value="Médio">Médio</option>
                             <option value="Grande">Grande</option>
@@ -230,22 +243,22 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div>
                         <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Cor Predominante</label>
-                        <input type="text" id="post-color" required placeholder="Ex: Marrom e Branco" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-brand-500">
+                        <input type="text" id="post-color" required placeholder="Ex: Marrom e Branco" class="w-full px-3 py-2 border border-gray-300 rounded text-xs focus:outline-none focus:border-brand-500">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Local Aproximado (Bairro/Cidade)</label>
-                        <input type="text" id="post-location" required placeholder="Ex: Centro, Itapetininga - SP" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-brand-500">
+                        <input type="text" id="post-location" required placeholder="Ex: Centro, Itapetininga - SP" class="w-full px-3 py-2 border border-gray-300 rounded text-xs focus:outline-none focus:border-brand-500">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div>
                         <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Data e Horário</label>
-                        <input type="datetime-local" id="post-datetime" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-brand-500">
+                        <input type="datetime-local" id="post-datetime" required class="w-full px-3 py-2 border border-gray-300 rounded text-xs focus:outline-none focus:border-brand-500">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Status do Anúncio</label>
-                        <select id="post-status" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:border-brand-500">
+                        <select id="post-status" required class="w-full px-3 py-2 border border-gray-300 rounded text-xs bg-white focus:outline-none focus:border-brand-500">
                             <option value="Procurando">Procurando / Ativo</option>
                             <option value="Reunido">Reunido com a Família / Solucionado</option>
                         </select>
@@ -254,34 +267,33 @@
 
                 <div class="mb-4">
                     <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Foto do Animal (URL de Imagem)</label>
-                    <input type="url" id="post-photo" required placeholder="https://images.unsplash.com/photo-..." class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-brand-500">
-                    <p class="text-[11px] text-gray-500 mt-1">Cole o link de uma foto real do pet (ex: Unsplash).</p>
+                    <input type="url" id="post-photo" required placeholder="https://images.unsplash.com/photo-..." class="w-full px-3 py-2 border border-gray-300 rounded text-xs focus:outline-none focus:border-brand-500">
                 </div>
 
                 <div class="mb-4">
                     <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Características Marcantes e Descrição</label>
-                    <textarea id="post-desc" rows="3" required placeholder="Coleira azul, coleira vermelha, mancha na orelha direita, dócil..." class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-brand-500"></textarea>
+                    <textarea id="post-desc" rows="3" required placeholder="Coleira azul, mancha na orelha direita, dócil..." class="w-full px-3 py-2 border border-gray-300 rounded text-xs focus:outline-none focus:border-brand-500"></textarea>
                 </div>
 
-                <div id="post-error-msg" class="mb-4 p-3 bg-red-50 text-red-700 text-xs rounded-lg hidden"></div>
+                <div id="post-error-msg" class="mb-4 p-3 bg-red-50 text-red-700 text-xs rounded hidden"></div>
 
                 <div class="flex justify-end space-x-3">
-                    <button type="button" onclick="closeModal('modal-post')" class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition">Cancelar</button>
-                    <button type="submit" class="px-6 py-2 bg-brand-500 text-white font-medium rounded-lg text-sm hover:bg-brand-600 transition shadow">Publicar Alerta</button>
+                    <button type="button" onclick="closeModal('modal-post')" class="px-4 py-2 border border-gray-300 rounded text-xs text-gray-700 hover:bg-gray-50 transition">Cancelar</button>
+                    <button type="submit" class="px-6 py-2 bg-brand-500 text-white font-medium rounded text-xs hover:bg-brand-600 transition shadow">Publicar Alerta</button>
                 </div>
             </form>
         </div>
     </div>
 
     <script>
-        // Storage Keys
         const STORAGE_KEYS = {
             USERS: 'auchou_users',
             POSTS: 'auchou_posts',
             COMMENTS: 'auchou_comments',
             CHATS: 'auchou_chats',
             CURRENT_USER: 'auchou_current_user',
-            ADMIN_LOGGED: 'auchou_admin_logged'
+            ADMIN_LOGGED: 'auchou_admin_logged',
+            RESET_CODES: 'auchou_reset_codes'
         };
 
         const ADMIN_EMAIL = 'bruninho0861@gmail.com';
@@ -292,7 +304,6 @@
         let activeChatRecipient = null;
         let isRegisterMode = false;
 
-        // Initial Seed Data if empty
         function initializeSeedData() {
             if (!localStorage.getItem(STORAGE_KEYS.USERS)) {
                 const initialUsers = [
@@ -363,14 +374,12 @@
             }
         }
 
-        // DOM Ready Load
         document.addEventListener('DOMContentLoaded', () => {
             initializeSeedData();
             updateNavigationUI();
             renderFeed();
         });
 
-        // Navigation UI updater
         function updateNavigationUI() {
             const navActions = document.getElementById('nav-actions');
             const visitorBanner = document.getElementById('visitor-banner');
@@ -380,37 +389,26 @@
                 
                 let adminLink = '';
                 if (currentUser.email === ADMIN_EMAIL || isAdminLoggedIn) {
-                    adminLink = `<button onclick="switchTab('admin')" class="text-xs font-semibold bg-red-100 text-red-700 px-3 py-1.5 rounded-lg hover:bg-red-200 transition"><i class="fa-solid fa-shield-halved mr-1"></i> Admin</button>`;
+                    adminLink = `<button onclick="switchTab('admin')" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"><i class="fa-solid fa-shield-halved mr-1"></i> Admin</button>`;
                 }
 
                 navActions.innerHTML = `
                     ${adminLink}
-                    <button onclick="openPostModal()" class="hidden sm:flex items-center space-x-1 bg-brand-500 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-brand-600 transition shadow">
-                        <i class="fa-solid fa-plus"></i>
-                        <span>Novo Alerta</span>
-                    </button>
-                    <button onclick="switchTab('chats')" class="relative p-2 text-gray-600 hover:text-brand-600 transition" title="Chat Interno">
-                        <i class="fa-solid fa-comments text-xl"></i>
-                    </button>
-                    <div class="relative group">
-                        <button onclick="switchTab('profile')" class="flex items-center space-x-2 focus:outline-none">
-                            <img src="${currentUser.avatar}" alt="${currentUser.name}" class="w-9 h-9 rounded-full object-cover border-2 border-brand-500">
-                        </button>
-                    </div>
-                    <button onclick="handleLogout()" class="text-gray-500 hover:text-red-600 transition p-2" title="Sair">
-                        <i class="fa-solid fa-right-from-bracket text-lg"></i>
-                    </button>
+                    <button onclick="switchTab('feed')" class="hover:underline">Home</button>
+                    <button onclick="switchTab('profile')" class="hover:underline">Profile</button>
+                    <button onclick="switchTab('chats')" class="hover:underline">Scraps / Chat</button>
+                    <button onclick="openPostModal()" class="bg-white text-brand-700 px-3 py-1 rounded font-bold shadow hover:bg-brand-50 transition">Novo Alerta</button>
+                    <button onclick="handleLogout()" class="text-brand-100 hover:text-white" title="Sair"><i class="fa-solid fa-right-from-bracket"></i></button>
                 `;
             } else {
                 if (visitorBanner) visitorBanner.classList.remove('hidden');
                 navActions.innerHTML = `
-                    <button onclick="openAuthModal('login')" class="text-brand-600 font-medium text-sm px-4 py-2 hover:bg-brand-50 rounded-xl transition">Entrar</button>
-                    <button onclick="openAuthModal('register')" class="bg-brand-500 text-white font-medium text-sm px-4 py-2 rounded-xl shadow hover:bg-brand-600 transition">Cadastre-se</button>
+                    <button onclick="openAuthModal('login')" class="bg-white text-brand-700 px-3 py-1 rounded font-bold shadow hover:bg-brand-50 transition">Entrar</button>
+                    <button onclick="openAuthModal('register')" class="bg-brand-600 text-white px-3 py-1 rounded font-bold hover:bg-brand-700 transition">Cadastre-se</button>
                 `;
             }
         }
 
-        // Modal Controls
         function openAuthModal(mode) {
             const modal = document.getElementById('modal-auth');
             const titleEl = document.getElementById('auth-modal-title');
@@ -451,8 +449,13 @@
 
         function openForgotPasswordModal() {
             closeModal('modal-auth');
-            document.getElementById('forgot-form').reset();
-            document.getElementById('forgot-error-msg').classList.add('hidden');
+            document.getElementById('forgot-step1-form').reset();
+            document.getElementById('forgot-step2-form').reset();
+            document.getElementById('forgot-step1-form').classList.remove('hidden');
+            document.getElementById('forgot-step2-form').classList.add('hidden');
+            document.getElementById('forgot-error-msg-1').classList.add('hidden');
+            document.getElementById('forgot-error-msg-2').classList.add('hidden');
+            document.getElementById('forgot-subtitle').innerText = 'Informe seu e-mail cadastrado para receber o código de confirmação';
             document.getElementById('modal-forgot').classList.remove('hidden');
         }
 
@@ -465,7 +468,92 @@
             document.getElementById(modalId).classList.add('hidden');
         }
 
-        // Authentication Submission Handler
+        let pendingResetEmail = '';
+
+        function handleRequestResetCode(event) {
+            event.preventDefault();
+            const email = document.getElementById('forgot-email').value.trim().toLowerCase();
+            const errorEl = document.getElementById('forgot-error-msg-1');
+            
+            let users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS)) || [];
+            const userExists = users.some(u => u.email === email) || email === ADMIN_EMAIL;
+
+            if (!userExists) {
+                errorEl.innerText = 'E-mail não encontrado na base de dados.';
+                errorEl.classList.remove('hidden');
+                return;
+            }
+
+            pendingResetEmail = email;
+            const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+            
+            let resetCodes = JSON.parse(localStorage.getItem(STORAGE_KEYS.RESET_CODES)) || {};
+            resetCodes[email] = { code: verificationCode, expires: Date.now() + 15 * 60 * 1000 };
+            localStorage.setItem(STORAGE_KEYS.RESET_CODES, JSON.stringify(resetCodes));
+
+            document.getElementById('forgot-step1-form').classList.add('hidden');
+            document.getElementById('forgot-step2-form').classList.remove('hidden');
+            document.getElementById('forgot-subtitle').innerText = `Digite o código enviado para ${email}`;
+            
+            const notice = document.getElementById('code-sent-notice');
+            notice.innerHTML = `✅ Código simulado enviado por e-mail para <b>${email}</b>.<br><b>Código de teste: <span class="text-base font-bold">${verificationCode}</span></b>`;
+            showToast('Código de verificação enviado!', 'success');
+        }
+
+        function handleVerifyAndResetPassword(event) {
+            event.preventDefault();
+            const codeInput = document.getElementById('forgot-code').value.trim();
+            const newPassword = document.getElementById('forgot-new-password').value.trim();
+            const errorEl = document.getElementById('forgot-error-msg-2');
+
+            const pwdRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>_\-+~=`[\]\\/;']).{8,}$/;
+            if (!pwdRegex.test(newPassword)) {
+                errorEl.innerText = 'A nova senha deve ter no mínimo 8 caracteres, uma letra maiúscula e um caractere especial (!@#$%...).';
+                errorEl.classList.remove('hidden');
+                return;
+            }
+
+            let resetCodes = JSON.parse(localStorage.getItem(STORAGE_KEYS.RESET_CODES)) || {};
+            const record = resetCodes[pendingResetEmail];
+
+            if (!record || record.code !== codeInput) {
+                errorEl.innerText = 'Código de confirmação incorreto.';
+                errorEl.classList.remove('hidden');
+                return;
+            }
+
+            if (Date.now() > record.expires) {
+                errorEl.innerText = 'O código expirou. Solicite um novo código.';
+                errorEl.classList.remove('hidden');
+                return;
+            }
+
+            let users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS)) || [];
+            const userIndex = users.findIndex(u => u.email === pendingResetEmail);
+
+            if (userIndex > -1) {
+                users[userIndex].password = newPassword;
+            } else {
+                users.push({
+                    id: 'u_admin',
+                    name: 'Administrador',
+                    email: ADMIN_EMAIL,
+                    password: newPassword,
+                    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
+                    bio: 'Gestor da Plataforma AuChou.',
+                    region: 'São Paulo - SP'
+                });
+            }
+
+            localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
+            delete resetCodes[pendingResetEmail];
+            localStorage.setItem(STORAGE_KEYS.RESET_CODES, JSON.stringify(resetCodes));
+
+            closeModal('modal-forgot');
+            showToast('Senha redefinida com segurança! Faça login.', 'success');
+            openAuthModal('login');
+        }
+
         function handleAuthSubmit(event) {
             event.preventDefault();
             const email = document.getElementById('auth-email').value.trim().toLowerCase();
@@ -481,10 +569,9 @@
                     return;
                 }
 
-                // Password strength validation: min 8 chars, 1 uppercase, 1 special character
                 const pwdRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>_\-+~=`[\]\\/;']).{8,}$/;
                 if (!pwdRegex.test(password)) {
-                    errorEl.innerText = 'A senha deve ter no mínimo 8 caracteres, incluindo pelo menos uma letra maiúscula e um caractere especial.';
+                    errorEl.innerText = 'A senha deve ter no mínimo 8 caracteres, uma letra maiúscula e um caractere especial (!@#$%...).';
                     errorEl.classList.remove('hidden');
                     return;
                 }
@@ -531,21 +618,18 @@
                         password: password,
                         avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
                         bio: 'Gestor da Plataforma AuChou.',
-                        region: 'Itapetininga - SP'
+                        region: 'São Paulo - SP'
                     };
                     users.push(user);
                     localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
                 }
 
                 if (!user) {
-                    errorEl.innerText = 'E-mail ou senha incorretos.';
-                    errorEl.classList.add('hidden'); // keep hidden until checked
-                    // Check if password was wrong
                     const userByEmail = users.find(u => u.email === email);
                     if (userByEmail) {
                         errorEl.innerText = 'Senha incorreta para este e-mail.';
                     } else {
-                        errorEl.innerText = 'E-mail não encontrado. Verifique ou cadastre-se.';
+                        errorEl.innerText = 'E-mail não encontrado.';
                     }
                     errorEl.classList.remove('hidden');
                     return;
@@ -565,49 +649,6 @@
             }
         }
 
-        // Forgot Password Handler
-        function handleForgotPasswordSubmit(event) {
-            event.preventDefault();
-            const email = document.getElementById('forgot-email').value.trim().toLowerCase();
-            const newPassword = document.getElementById('forgot-new-password').value.trim();
-            const errorEl = document.getElementById('forgot-error-msg');
-            
-            const pwdRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>_\-+~=`[\]\\/;']).{8,}$/;
-            if (!pwdRegex.test(newPassword)) {
-                errorEl.innerText = 'A nova senha deve ter no mínimo 8 caracteres, uma letra maiúscula e um caractere especial.';
-                errorEl.classList.remove('hidden');
-                return;
-            }
-
-            let users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS)) || [];
-            const userIndex = users.findIndex(u => u.email === email);
-
-            if (userIndex === -1 && email !== ADMIN_EMAIL) {
-                errorEl.innerText = 'E-mail não encontrado na base de dados.';
-                errorEl.classList.remove('hidden');
-                return;
-            }
-
-            if (userIndex > -1) {
-                users[userIndex].password = newPassword;
-            } else {
-                users.push({
-                    id: 'u_admin',
-                    name: 'Administrador',
-                    email: ADMIN_EMAIL,
-                    password: newPassword,
-                    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
-                    bio: 'Gestor da Plataforma AuChou.',
-                    region: 'Itapetininga - SP'
-                });
-            }
-
-            localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
-            closeModal('modal-forgot');
-            showToast('Senha redefinida com sucesso! Faça login com a nova senha.', 'success');
-            openAuthModal('login');
-        }
-
         function handleLogout() {
             localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
             localStorage.removeItem(STORAGE_KEYS.ADMIN_LOGGED);
@@ -615,42 +656,32 @@
             isAdminLoggedIn = false;
             updateNavigationUI();
             renderFeed();
-            showToast('Sessão encerrada com sucesso.', 'info');
+            showToast('Sessão encerrada.', 'info');
         }
 
-        // Toast Notification Helper
         function showToast(message, type = 'success') {
             const existingToast = document.getElementById('auchou-toast');
             if (existingToast) existingToast.remove();
 
-            const colors = {
-                success: 'bg-emerald-600',
-                error: 'bg-red-600',
-                info: 'bg-secondary'
-            };
-
+            const colors = { success: 'bg-emerald-600', error: 'bg-red-600', info: 'bg-secondary' };
             const toast = document.createElement('div');
             toast.id = 'auchou-toast';
-            toast.className = `fixed bottom-5 right-5 z-50 text-white px-5 py-3 rounded-xl shadow-xl flex items-center space-x-3 transition transform duration-300 translate-y-2 ${colors[type] || colors.success}`;
-            toast.innerHTML = `
-                <i class="fa-solid ${type === 'success' ? 'fa-circle-check' : 'fa-circle-info'} text-lg"></i>
-                <span class="text-sm font-medium">${message}</span>
-            `;
+            toast.className = `fixed bottom-5 right-5 z-50 text-white px-4 py-2 rounded shadow-xl flex items-center space-x-2 text-xs font-medium ${colors[type] || colors.success}`;
+            toast.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-circle-check' : 'fa-circle-info'}"></i><span>${message}</span>`;
             document.body.appendChild(toast);
 
             setTimeout(() => {
-                toast.classList.add('opacity-0', 'translate-y-2');
+                toast.classList.add('opacity-0');
                 setTimeout(() => toast.remove(), 300);
             }, 3500);
         }
 
-        // Feed Rendering & Filtering
         function renderFeed(filter = {}) {
             currentActiveTab = 'feed';
             const appView = document.getElementById('app-view');
             const posts = JSON.parse(localStorage.getItem(STORAGE_KEYS.POSTS)) || [];
+            const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS)) || [];
 
-            // Filter logic
             const speciesFilter = filter.species || document.getElementById('filter-species')?.value || '';
             const statusFilter = filter.status || document.getElementById('filter-status')?.value || '';
             const searchKeyword = filter.search || document.getElementById('global-search-input')?.value?.toLowerCase() || '';
@@ -665,69 +696,146 @@
                 return true;
             });
 
-            appView.innerHTML = `
-                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                    <!-- Sidebar Filters -->
-                    <div class="lg:col-span-1 space-y-4">
-                        <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-                            <h3 class="font-bold text-gray-900 mb-4 flex items-center justify-between">
-                                <span>Filtros de Busca</span>
-                                <button onclick="resetFilters()" class="text-xs text-brand-600 hover:underline">Limpar</button>
-                            </h3>
-
-                            <div class="space-y-3">
-                                <div>
-                                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Espécie</label>
-                                    <select id="filter-species" onchange="applyFilters()" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:outline-none focus:border-brand-500">
-                                        <option value="">Todas as Espécies</option>
-                                        <option value="Cão" ${speciesFilter === 'Cão' ? 'selected' : ''}>Cães</option>
-                                        <option value="Gato" ${speciesFilter === 'Gato' ? 'selected' : ''}>Gatos</option>
-                                        <option value="Outro" ${speciesFilter === 'Outro' ? 'selected' : ''}>Outros Pets</option>
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Status</label>
-                                    <select id="filter-status" onchange="applyFilters()" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:outline-none focus:border-brand-500">
-                                        <option value="">Todos os Status</option>
-                                        <option value="Procurando" ${statusFilter === 'Procurando' ? 'selected' : ''}>Procurando (Ativo)</option>
-                                        <option value="Reunido" ${statusFilter === 'Reunido' ? 'selected' : ''}>Reunido com a Família</option>
-                                    </select>
+            // If user is logged in, render classic Orkut 3-column layout
+            if (currentUser) {
+                appView.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                        <!-- Left Column: User Profile & Shortcuts (Orkut Style) -->
+                        <div class="md:col-span-1 space-y-4">
+                            <div class="bg-white rounded p-4 shadow-sm border border-gray-200 text-center">
+                                <img src="${currentUser.avatar}" alt="${currentUser.name}" class="w-24 h-24 rounded mx-auto object-cover mb-2 border">
+                                <h3 class="font-bold text-sm text-brand-600">${currentUser.name}</h3>
+                                <p class="text-[11px] text-gray-500 mb-3">${currentUser.region || 'Itapetininga - SP'}</p>
+                                <div class="text-left text-xs space-y-1 border-t border-gray-100 pt-2 text-gray-700">
+                                    <p><a href="#" onclick="switchTab('profile'); return false;" class="hover:underline text-brand-600"><i class="fa-solid fa-user mr-1"></i> meu perfil</a></p>
+                                    <p><a href="#" onclick="switchTab('chats'); return false;" class="hover:underline text-brand-600"><i class="fa-solid fa-comments mr-1"></i> recados / chat</a></p>
+                                    <p><a href="#" onclick="switchTab('my-posts'); return false;" class="hover:underline text-brand-600"><i class="fa-solid fa-paw mr-1"></i> meus alertas</a></p>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Quick Action Card for logged user -->
-                        <div class="bg-gradient-to-br from-secondary to-gray-800 rounded-2xl p-5 text-white shadow-sm">
-                            <h4 class="font-bold mb-2">Viu ou perdeu um pet?</h4>
-                            <p class="text-xs text-gray-300 mb-4">Publique um alerta agora mesmo para nossa comunidade ajudar no resgate.</p>
-                            <button onclick="openPostModal()" class="w-full bg-brand-500 text-white font-medium py-2 rounded-xl text-sm hover:bg-brand-600 transition shadow">Criar Novo Alerta</button>
-                        </div>
-                    </div>
-
-                    <!-- Main Feed Stream -->
-                    <div class="lg:col-span-3 space-y-6">
-                        <div class="flex items-center justify-between bg-white px-5 py-3 rounded-2xl shadow-sm border border-gray-100">
-                            <span class="text-sm font-semibold text-gray-700">Publicações Recentes (${filteredPosts.length})</span>
-                            <div class="flex space-x-2">
-                                <button onclick="renderFeed()" class="text-xs font-medium px-3 py-1.5 bg-brand-50 text-brand-600 rounded-lg">Todos</button>
-                            </div>
-                        </div>
-
-                        <div id="posts-container" class="space-y-6">
-                            ${filteredPosts.length === 0 ? `
-                                <div class="bg-white rounded-2xl p-12 text-center shadow-sm border border-gray-100">
-                                    <div class="w-16 h-16 bg-brand-50 text-brand-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
-                                        <i class="fa-solid fa-magnifying-glass"></i>
+                            <div class="bg-white rounded p-4 shadow-sm border border-gray-200">
+                                <h4 class="font-bold text-xs text-gray-700 mb-2 uppercase tracking-wide">Filtros Rápidos</h4>
+                                <div class="space-y-2 text-xs">
+                                    <div>
+                                        <label class="block text-gray-500 mb-1">Espécie</label>
+                                        <select id="filter-species" onchange="applyFilters()" class="w-full px-2 py-1 border border-gray-300 rounded bg-white">
+                                            <option value="">Todas</option>
+                                            <option value="Cão" ${speciesFilter === 'Cão' ? 'selected' : ''}>Cães</option>
+                                            <option value="Gato" ${speciesFilter === 'Gato' ? 'selected' : ''}>Gatos</option>
+                                            <option value="Outro" ${speciesFilter === 'Outro' ? 'selected' : ''}>Outros</option>
+                                        </select>
                                     </div>
-                                    <h3 class="text-lg font-bold text-gray-900 mb-1">Nenhum pet encontrado</h3>
-                                    <p class="text-sm text-gray-500">Tente ajustar seus filtros de busca ou criar um novo alerta.</p>
+                                    <div>
+                                        <label class="block text-gray-500 mb-1">Status</label>
+                                        <select id="filter-status" onchange="applyFilters()" class="w-full px-2 py-1 border border-gray-300 rounded bg-white">
+                                            <option value="">Todos</option>
+                                            <option value="Procurando" ${statusFilter === 'Procurando' ? 'selected' : ''}>Procurando</option>
+                                            <option value="Reunido" ${statusFilter === 'Reunido' ? 'selected' : ''}>Reunido</option>
+                                        </select>
+                                    </div>
                                 </div>
-                            ` : filteredPosts.map(post => renderPostCard(post)).join('')}
+                            </div>
+                        </div>
+
+                        <!-- Center Column: Main Feed -->
+                        <div class="md:col-span-2 lg:col-span-3 space-y-4">
+                            <div class="bg-white rounded p-3 shadow-sm border border-gray-200 flex items-center justify-between">
+                                <span class="text-xs font-bold text-gray-700">Feed de Alertas (${filteredPosts.length})</span>
+                                <button onclick="openPostModal()" class="bg-brand-500 text-white px-3 py-1 rounded text-xs font-medium shadow hover:bg-brand-600">Novo Alerta</button>
+                            </div>
+
+                            <div id="posts-container" class="space-y-4">
+                                ${filteredPosts.length === 0 ? `
+                                    <div class="bg-white rounded p-8 text-center border border-gray-200">
+                                        <p class="text-xs text-gray-500">Nenhum pet encontrado com estes filtros.</p>
+                                    </div>
+                                ` : filteredPosts.map(post => renderPostCard(post)).join('')}
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Pet Photos Grid (Orkut style widget) -->
+                        <div class="md:col-span-1 space-y-4">
+                            <div class="bg-white rounded p-3 shadow-sm border border-gray-200">
+                                <h4 class="font-bold text-xs text-gray-700 mb-2 flex items-center justify-between">
+                                    <span>Pets em Destaque</span>
+                                    <span class="text-[10px] text-gray-400">(${posts.length})</span>
+                                </h4>
+                                <div class="grid grid-cols-3 gap-2">
+                                    ${posts.slice(0, 9).map(p => `
+                                        <div onclick="openPostDetails('${p.id}')" class="cursor-pointer group">
+                                            <img src="${p.photo}" class="w-full h-16 object-cover rounded border border-gray-200 group-hover:opacity-90" onerror="this.src='https://placehold.co/100x100/e07a5f/ffffff?text=Pet'">
+                                            <p class="text-[9px] text-gray-600 truncate mt-0.5 text-center">${p.breed}</p>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded p-3 shadow-sm border border-gray-200">
+                                <h4 class="font-bold text-xs text-gray-700 mb-2">Comunidade Ativa</h4>
+                                <div class="space-y-2">
+                                    ${users.slice(0, 4).map(u => `
+                                        <div class="flex items-center space-x-2">
+                                            <img src="${u.avatar}" class="w-7 h-7 rounded-full object-cover">
+                                            <div class="min-w-0">
+                                                <p class="text-[11px] font-bold text-gray-800 truncate">${u.name}</p>
+                                                <p class="text-[9px] text-gray-400 truncate">${u.region || 'SP'}</p>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `;
+                `;
+            } else {
+                // Visitor Feed Layout
+                appView.innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                        <div class="lg:col-span-1 space-y-4">
+                            <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-200">
+                                <h3 class="font-bold text-gray-900 mb-4 flex items-center justify-between text-sm">
+                                    <span>Filtros de Busca</span>
+                                    <button onclick="resetFilters()" class="text-xs text-brand-600 hover:underline">Limpar</button>
+                                </h3>
+                                <div class="space-y-3 text-xs">
+                                    <div>
+                                        <label class="block font-semibold text-gray-600 uppercase mb-1">Espécie</label>
+                                        <select id="filter-species" onchange="applyFilters()" class="w-full px-3 py-2 border border-gray-200 rounded bg-gray-50">
+                                            <option value="">Todas as Espécies</option>
+                                            <option value="Cão" ${speciesFilter === 'Cão' ? 'selected' : ''}>Cães</option>
+                                            <option value="Gato" ${speciesFilter === 'Gato' ? 'selected' : ''}>Gatos</option>
+                                            <option value="Outro" ${speciesFilter === 'Outro' ? 'selected' : ''}>Outros Pets</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block font-semibold text-gray-600 uppercase mb-1">Status</label>
+                                        <select id="filter-status" onchange="applyFilters()" class="w-full px-3 py-2 border border-gray-200 rounded bg-gray-50">
+                                            <option value="">Todos os Status</option>
+                                            <option value="Procurando" ${statusFilter === 'Procurando' ? 'selected' : ''}>Procurando</option>
+                                            <option value="Reunido" ${statusFilter === 'Reunido' ? 'selected' : ''}>Reunido com a Família</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-3 space-y-6">
+                            <div class="flex items-center justify-between bg-white px-5 py-3 rounded-xl shadow-sm border border-gray-200 text-xs font-semibold text-gray-700">
+                                <span>Publicações Recentes (${filteredPosts.length})</span>
+                            </div>
+
+                            <div id="posts-container" class="space-y-6">
+                                ${filteredPosts.length === 0 ? `
+                                    <div class="bg-white rounded-xl p-12 text-center shadow-sm border border-gray-200">
+                                        <h3 class="text-base font-bold text-gray-900 mb-1">Nenhum pet encontrado</h3>
+                                        <p class="text-xs text-gray-500">Tente ajustar seus filtros de busca.</p>
+                                    </div>
+                                ` : filteredPosts.map(post => renderPostCard(post)).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
         }
 
         function applyFilters() {
@@ -745,70 +853,56 @@
             renderFeed({ search: val });
         }
 
-        // Render Single Post Card HTML
         function renderPostCard(post) {
             const isLiked = currentUser && post.likes && post.likes.includes(currentUser.id);
             const comments = JSON.parse(localStorage.getItem(STORAGE_KEYS.COMMENTS)) || {};
             const postComments = comments[post.id] || [];
-
             const isResolved = post.status === 'Reunido';
 
             return `
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition hover:shadow-md">
-                    <!-- Post Header -->
-                    <div class="p-4 flex items-center justify-between border-b border-gray-50">
-                        <div class="flex items-center space-x-3">
-                            <img src="${post.userAvatar}" alt="${post.userName}" class="w-10 h-10 rounded-full object-cover">
+                <div class="bg-white rounded shadow-sm border border-gray-200 overflow-hidden text-xs">
+                    <div class="p-3 flex items-center justify-between border-b border-gray-100 bg-gray-50">
+                        <div class="flex items-center space-x-2">
+                            <img src="${post.userAvatar}" alt="${post.userName}" class="w-8 h-8 rounded-full object-cover">
                             <div>
-                                <h4 class="font-bold text-sm text-gray-900">${post.userName}</h4>
-                                <p class="text-xs text-gray-500"><i class="fa-solid fa-location-dot mr-1"></i>${post.location}</p>
+                                <h4 class="font-bold text-gray-900">${post.userName}</h4>
+                                <p class="text-[10px] text-gray-500"><i class="fa-solid fa-location-dot mr-1"></i>${post.location}</p>
                             </div>
                         </div>
-                        <div class="flex items-center space-x-2">
-                            <span class="px-3 py-1 rounded-full text-xs font-semibold ${isResolved ? 'bg-emerald-100 text-emerald-800' : 'bg-brand-100 text-brand-700'}">
-                                ${post.category} (${post.status})
-                            </span>
-                        </div>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-semibold ${isResolved ? 'bg-emerald-100 text-emerald-800' : 'bg-brand-100 text-brand-700'}">
+                            ${post.category}
+                        </span>
                     </div>
 
-                    <!-- Post Media / Photo -->
-                    <div class="relative bg-gray-100 max-h-96 overflow-hidden cursor-pointer" onclick="openPostDetails('${post.id}')">
-                        <img src="${post.photo}" alt="${post.breed}" class="w-full h-full object-cover max-h-96" onerror="this.src='https://placehold.co/600x400/e07a5f/ffffff?text=Pet'">
+                    <div class="relative bg-gray-100 max-h-80 overflow-hidden cursor-pointer" onclick="openPostDetails('${post.id}')">
+                        <img src="${post.photo}" alt="${post.breed}" class="w-full h-full object-cover max-h-80" onerror="this.src='https://placehold.co/600x400/e07a5f/ffffff?text=Pet'">
                     </div>
 
-                    <!-- Post Body Content -->
-                    <div class="p-5">
-                        <div class="flex flex-wrap gap-2 mb-3">
-                            <span class="px-2.5 py-1 bg-gray-100 text-gray-700 rounded-lg text-xs font-medium">Raça: ${post.breed}</span>
-                            <span class="px-2.5 py-1 bg-gray-100 text-gray-700 rounded-lg text-xs font-medium">Porte: ${post.size}</span>
-                            <span class="px-2.5 py-1 bg-gray-100 text-gray-700 rounded-lg text-xs font-medium">Cor: ${post.color}</span>
-                            ${post.petName ? `<span class="px-2.5 py-1 bg-amber-50 text-amber-800 rounded-lg text-xs font-medium">Nome: ${post.petName}</span>` : ''}
+                    <div class="p-3">
+                        <div class="flex flex-wrap gap-1.5 mb-2">
+                            <span class="px-2 py-0.5 bg-gray-100 text-gray-700 rounded">Raça: ${post.breed}</span>
+                            <span class="px-2 py-0.5 bg-gray-100 text-gray-700 rounded">Porte: ${post.size}</span>
+                            <span class="px-2 py-0.5 bg-gray-100 text-gray-700 rounded">Cor: ${post.color}</span>
                         </div>
 
-                        <p class="text-gray-800 text-sm mb-4 leading-relaxed">${post.description}</p>
+                        <p class="text-gray-800 mb-3 leading-relaxed">${post.description}</p>
 
-                        <!-- Action Bar -->
-                        <div class="flex items-center justify-between pt-3 border-t border-gray-100">
-                            <div class="flex items-center space-x-4">
-                                <button onclick="toggleLike('${post.id}')" class="flex items-center space-x-1.5 text-sm ${isLiked ? 'text-red-500 font-bold' : 'text-gray-600 hover:text-red-500'} transition">
-                                    <i class="${isLiked ? 'fa-solid' : 'fa-regular'} fa-heart text-lg"></i>
+                        <div class="flex items-center justify-between pt-2 border-t border-gray-100">
+                            <div class="flex items-center space-x-3">
+                                <button onclick="toggleLike('${post.id}')" class="flex items-center space-x-1 ${isLiked ? 'text-red-500 font-bold' : 'text-gray-600 hover:text-red-500'} transition">
+                                    <i class="${isLiked ? 'fa-solid' : 'fa-regular'} fa-heart text-sm"></i>
                                     <span>${post.likes ? post.likes.length : 0}</span>
                                 </button>
-                                <button onclick="openPostDetails('${post.id}')" class="flex items-center space-x-1.5 text-sm text-gray-600 hover:text-brand-600 transition">
-                                    <i class="fa-regular fa-comment text-lg"></i>
+                                <button onclick="openPostDetails('${post.id}')" class="flex items-center space-x-1 text-gray-600 hover:text-brand-600 transition">
+                                    <i class="fa-regular fa-comment text-sm"></i>
                                     <span>${postComments.length}</span>
                                 </button>
                             </div>
 
                             <div class="flex items-center space-x-2">
-                                <button onclick="sharePost('${post.id}')" class="p-2 text-gray-600 hover:text-brand-600 transition" title="Compartilhar">
-                                    <i class="fa-solid fa-share-nodes"></i>
-                                </button>
+                                <button onclick="sharePost('${post.id}')" class="text-gray-600 hover:text-brand-600" title="Compartilhar"><i class="fa-solid fa-share-nodes"></i></button>
                                 ${currentUser && currentUser.id !== post.userId ? `
-                                    <button onclick="startChatWithUser('${post.userId}', '${post.userName}')" class="bg-brand-50 text-brand-600 px-3 py-1.5 rounded-xl text-xs font-semibold hover:bg-brand-100 transition flex items-center space-x-1.5">
-                                        <i class="fa-solid fa-comment-dots"></i>
-                                        <span>Chat Privado</span>
-                                    </button>
+                                    <button onclick="startChatWithUser('${post.userId}', '${post.userName}')" class="bg-brand-50 text-brand-600 px-2 py-1 rounded font-semibold hover:bg-brand-100">Chat</button>
                                 ` : ''}
                             </div>
                         </div>
@@ -817,26 +911,15 @@
             `;
         }
 
-        // Post Interactions (Like, Comment, Share)
         function toggleLike(postId) {
-            if (!currentUser) {
-                openAuthModal('login');
-                showToast('Faça login para curtir publicações.', 'info');
-                return;
-            }
-
+            if (!currentUser) { openAuthModal('login'); return; }
             let posts = JSON.parse(localStorage.getItem(STORAGE_KEYS.POSTS)) || [];
             const post = posts.find(p => p.id === postId);
             if (!post) return;
-
             if (!post.likes) post.likes = [];
             const index = post.likes.indexOf(currentUser.id);
-            if (index > -1) {
-                post.likes.splice(index, 1);
-            } else {
-                post.likes.push(currentUser.id);
-            }
-
+            if (index > -1) post.likes.splice(index, 1);
+            else post.likes.push(currentUser.id);
             localStorage.setItem(STORAGE_KEYS.POSTS, JSON.stringify(posts));
             renderFeed();
         }
@@ -844,17 +927,10 @@
         function sharePost(postId) {
             const url = window.location.href.split('#')[0] + '#post=' + postId;
             if (navigator.clipboard) {
-                navigator.clipboard.writeText(url).then(() => {
-                    showToast('Link do aviso copiado para a área de transferência!', 'success');
-                }).catch(() => {
-                    prompt('Copie o link do aviso:', url);
-                });
-            } else {
-                prompt('Copie o link do aviso:', url);
-            }
+                navigator.clipboard.writeText(url).then(() => showToast('Link copiado!', 'success')).catch(() => prompt('Link:', url));
+            } else { prompt('Link:', url); }
         }
 
-        // Post Details Modal with Comments
         function openPostDetails(postId) {
             const posts = JSON.parse(localStorage.getItem(STORAGE_KEYS.POSTS)) || [];
             const post = posts.find(p => p.id === postId);
@@ -862,7 +938,6 @@
 
             const comments = JSON.parse(localStorage.getItem(STORAGE_KEYS.COMMENTS)) || {};
             const postComments = comments[postId] || [];
-
             const modalId = 'modal-details';
             let modal = document.getElementById(modalId);
             if (!modal) {
@@ -873,46 +948,34 @@
             }
 
             modal.innerHTML = `
-                <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative my-8 max-h-[90vh] flex flex-col">
-                    <button onclick="closeModal('${modalId}')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10">
-                        <i class="fa-solid fa-xmark text-lg"></i>
-                    </button>
-
+                <div class="bg-white rounded max-w-xl w-full p-5 shadow-2xl relative my-8 max-h-[90vh] flex flex-col text-xs">
+                    <button onclick="closeModal('${modalId}')" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 z-10"><i class="fa-solid fa-xmark text-base"></i></button>
                     <div class="overflow-y-auto pr-1 flex-1 custom-scrollbar">
-                        <div class="flex items-center space-x-3 mb-4">
-                            <img src="${post.userAvatar}" class="w-10 h-10 rounded-full object-cover">
+                        <div class="flex items-center space-x-2 mb-3">
+                            <img src="${post.userAvatar}" class="w-8 h-8 rounded-full object-cover">
                             <div>
-                                <h4 class="font-bold text-sm text-gray-900">${post.userName}</h4>
-                                <p class="text-xs text-gray-500">${post.location}</p>
+                                <h4 class="font-bold text-gray-900">${post.userName}</h4>
+                                <p class="text-[10px] text-gray-500">${post.location}</p>
                             </div>
                         </div>
-
-                        <div class="rounded-xl overflow-hidden mb-4 bg-gray-100">
-                            <img src="${post.photo}" class="w-full max-h-80 object-cover" onerror="this.src='https://placehold.co/600x400/e07a5f/ffffff?text=Pet'">
+                        <div class="rounded overflow-hidden mb-3 bg-gray-100">
+                            <img src="${post.photo}" class="w-full max-h-72 object-cover" onerror="this.src='https://placehold.co/600x400/e07a5f/ffffff?text=Pet'">
                         </div>
-
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">${post.category}: ${post.breed} (${post.status})</h3>
-                        <p class="text-sm text-gray-700 mb-4">${post.description}</p>
-
-                        <hr class="my-4 border-gray-100">
-
-                        <h4 class="font-bold text-sm text-gray-900 mb-3">Comentários e Dicas de Paradeiro (${postComments.length})</h4>
-
-                        <div id="comment-list" class="space-y-3 mb-4">
-                            ${postComments.length === 0 ? '<p class="text-xs text-gray-500 italic">Nenhum comentário ainda. Seja o primeiro a ajudar!</p>' : postComments.map(c => `
-                                <div class="bg-gray-50 p-3 rounded-xl">
-                                    <div class="flex items-center justify-between mb-1">
-                                        <span class="font-semibold text-xs text-gray-900">${c.userName}</span>
-                                        <span class="text-[10px] text-gray-400">${new Date(c.createdAt).toLocaleDateString()}</span>
-                                    </div>
-                                    <p class="text-xs text-gray-700">${c.text}</p>
+                        <h3 class="font-bold text-sm text-gray-900 mb-1">${post.category}: ${post.breed} (${post.status})</h3>
+                        <p class="text-gray-700 mb-3">${post.description}</p>
+                        <hr class="my-3 border-gray-100">
+                        <h4 class="font-bold text-gray-900 mb-2">Comentários (${postComments.length})</h4>
+                        <div class="space-y-2 mb-3">
+                            ${postComments.length === 0 ? '<p class="text-gray-400 italic">Nenhum comentário ainda.</p>' : postComments.map(c => `
+                                <div class="bg-gray-50 p-2 rounded">
+                                    <div class="flex justify-between font-bold text-gray-800 mb-0.5"><span>${c.userName}</span><span class="text-[9px] text-gray-400">${new Date(c.createdAt).toLocaleDateString()}</span></div>
+                                    <p class="text-gray-700">${c.text}</p>
                                 </div>
                             `).join('')}
                         </div>
-
                         <form onsubmit="handleCommentSubmit(event, '${post.id}')" class="flex gap-2">
-                            <input type="text" id="comment-input" required placeholder="${currentUser ? 'Escreva um comentário ou dica...' : 'Faça login para comentar...'}" ${!currentUser ? 'disabled' : ''} class="flex-1 px-3 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-brand-500">
-                            <button type="submit" ${!currentUser ? 'disabled' : ''} class="bg-brand-500 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-brand-600 transition disabled:opacity-50">Enviar</button>
+                            <input type="text" id="comment-input" required placeholder="${currentUser ? 'Comentar...' : 'Faça login...'}" ${!currentUser ? 'disabled' : ''} class="flex-1 px-3 py-1.5 border rounded">
+                            <button type="submit" ${!currentUser ? 'disabled' : ''} class="bg-brand-500 text-white px-3 py-1.5 rounded font-medium">Enviar</button>
                         </form>
                     </div>
                 </div>
@@ -922,48 +985,28 @@
 
         function handleCommentSubmit(event, postId) {
             event.preventDefault();
-            if (!currentUser) {
-                openAuthModal('login');
-                return;
-            }
-
+            if (!currentUser) { openAuthModal('login'); return; }
             const input = document.getElementById('comment-input');
             const text = input.value.trim();
             if (!text) return;
-
             let comments = JSON.parse(localStorage.getItem(STORAGE_KEYS.COMMENTS)) || {};
             if (!comments[postId]) comments[postId] = [];
-
-            comments[postId].push({
-                id: 'c_' + Date.now(),
-                userId: currentUser.id,
-                userName: currentUser.name,
-                userAvatar: currentUser.avatar,
-                text,
-                createdAt: Date.now()
-            });
-
+            comments[postId].push({ id: 'c_' + Date.now(), userId: currentUser.id, userName: currentUser.name, userAvatar: currentUser.avatar, text, createdAt: Date.now() });
             localStorage.setItem(STORAGE_KEYS.COMMENTS, JSON.stringify(comments));
             input.value = '';
             openPostDetails(postId);
-            showToast('Comentário publicado com sucesso!', 'success');
+            showToast('Comentário publicado!', 'success');
         }
 
-        // Create Post Modal Management
         function openPostModal(postIdToEdit = null) {
-            if (!currentUser) {
-                openAuthModal('login');
-                showToast('Faça login para publicar um alerta.', 'info');
-                return;
-            }
-
+            if (!currentUser) { openAuthModal('login'); return; }
             const modal = document.getElementById('modal-post');
             const titleEl = document.getElementById('post-modal-title');
             document.getElementById('post-form').reset();
             document.getElementById('post-error-msg').classList.add('hidden');
 
             if (postIdToEdit) {
-                titleEl.innerText = 'Editar Alerta de Pet';
+                titleEl.innerText = 'Editar Alerta';
                 const posts = JSON.parse(localStorage.getItem(STORAGE_KEYS.POSTS)) || [];
                 const post = posts.find(p => p.id === postIdToEdit);
                 if (post) {
@@ -983,12 +1026,10 @@
             } else {
                 titleEl.innerText = 'Criar Alerta de Pet';
                 document.getElementById('post-edit-id').value = '';
-                // Set default datetime to now
                 const now = new Date();
                 now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
                 document.getElementById('post-datetime').value = now.toISOString().slice(0, 16);
             }
-
             modal.classList.remove('hidden');
         }
 
@@ -1015,90 +1056,40 @@
             }
 
             let posts = JSON.parse(localStorage.getItem(STORAGE_KEYS.POSTS)) || [];
-
             if (editId) {
-                const index = posts.findIndex(p => p.id === editId);
-                if (index > -1) {
-                    posts[index] = {
-                        ...posts[index],
-                        category,
-                        petName,
-                        species,
-                        breed,
-                        size,
-                        color,
-                        location,
-                        datetime,
-                        status,
-                        photo,
-                        description
-                    };
+                const idx = posts.findIndex(p => p.id === editId);
+                if (idx > -1) {
+                    posts[idx] = { ...posts[idx], category, petName, species, breed, size, color, location, datetime, status, photo, description };
                 }
-                showToast('Alerta atualizado com sucesso!', 'success');
+                showToast('Alerta atualizado!', 'success');
             } else {
-                const newPost = {
-                    id: 'p_' + Date.now(),
-                    userId: currentUser.id,
-                    userName: currentUser.name,
-                    userAvatar: currentUser.avatar,
-                    category,
-                    petName,
-                    species,
-                    breed,
-                    size,
-                    color,
-                    location,
-                    datetime,
-                    status,
-                    photo,
-                    description,
-                    likes: [],
-                    createdAt: Date.now()
-                };
+                const newPost = { id: 'p_' + Date.now(), userId: currentUser.id, userName: currentUser.name, userAvatar: currentUser.avatar, category, petName, species, breed, size, color, location, datetime, status, photo, description, likes: [], createdAt: Date.now() };
                 posts.unshift(newPost);
-                showToast('Novo alerta publicado com sucesso!', 'success');
+                showToast('Novo alerta publicado!', 'success');
             }
 
             localStorage.setItem(STORAGE_KEYS.POSTS, JSON.stringify(posts));
             closeModal('modal-post');
-            
-            if (currentActiveTab === 'my-posts') {
-                renderMyPosts();
-            } else {
-                renderFeed();
-            }
+            if (currentActiveTab === 'my-posts') renderMyPosts();
+            else renderFeed();
         }
 
-        // Chat System Integration
         function startChatWithUser(recipientId, recipientName) {
-            if (!currentUser) {
-                openAuthModal('login');
-                showToast('Faça login para utilizar o chat interno.', 'info');
-                return;
-            }
-
-            if (currentUser.id === recipientId) {
-                showToast('Você não pode conversar consigo mesmo.', 'info');
-                return;
-            }
-
+            if (!currentUser) { openAuthModal('login'); return; }
+            if (currentUser.id === recipientId) { showToast('Não pode conversar consigo mesmo.', 'info'); return; }
             activeChatRecipient = { id: recipientId, name: recipientName };
             switchTab('chats');
         }
 
         function switchTab(tab) {
             currentActiveTab = tab;
-            const appView = document.getElementById('app-view');
-
-            if (tab === 'feed') {
-                renderFeed();
-            } else if (tab === 'profile') {
-                renderProfileView();
-            } else if (tab === 'chats') {
-                renderChatView();
-            } else if (tab === 'admin') {
+            if (tab === 'feed') renderFeed();
+            else if (tab === 'profile') renderProfileView();
+            else if (tab === 'my-posts') renderProfileView();
+            else if (tab === 'chats') renderChatView();
+            else if (tab === 'admin') {
                 if (!currentUser || (currentUser.email !== ADMIN_EMAIL && !isAdminLoggedIn)) {
-                    showToast('Acesso negado. Área restrita ao administrador.', 'error');
+                    showToast('Acesso negado.', 'error');
                     renderFeed();
                     return;
                 }
@@ -1107,32 +1098,25 @@
         }
 
         function renderProfileView() {
-            if (!currentUser) {
-                openAuthModal('login');
-                return;
-            }
-
+            if (!currentUser) { openAuthModal('login'); return; }
             const appView = document.getElementById('app-view');
             appView.innerHTML = `
-                <div class="max-w-4xl mx-auto space-y-6">
-                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-6">
-                        <div class="flex items-center space-x-4">
-                            <img src="${currentUser.avatar}" class="w-20 h-20 rounded-full object-cover border-4 border-brand-500">
+                <div class="max-w-4xl mx-auto space-y-4 text-xs">
+                    <div class="bg-white rounded p-4 shadow-sm border border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="flex items-center space-x-3">
+                            <img src="${currentUser.avatar}" class="w-16 h-16 rounded object-cover border-2 border-brand-500">
                             <div>
-                                <h2 class="text-xl font-bold text-gray-900">${currentUser.name}</h2>
-                                <p class="text-xs text-gray-500">${currentUser.email}</p>
-                                <p class="text-xs text-gray-600 mt-1"><i class="fa-solid fa-location-dot mr-1"></i>${currentUser.region || 'Itapetininga - SP'}</p>
+                                <h2 class="font-bold text-sm text-gray-900">${currentUser.name}</h2>
+                                <p class="text-gray-500">${currentUser.email}</p>
+                                <p class="text-gray-600 mt-0.5"><i class="fa-solid fa-location-dot mr-1"></i>${currentUser.region || 'Itapetininga - SP'}</p>
                             </div>
                         </div>
-                        <div class="flex space-x-3">
-                            <button onclick="switchTab('my-posts')" class="bg-brand-50 text-brand-600 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-brand-100 transition">Meus Alertas</button>
-                            <button onclick="openEditProfileModal()" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-gray-200 transition">Editar Perfil</button>
+                        <div class="flex space-x-2">
+                            <button onclick="renderMyPosts()" class="bg-brand-50 text-brand-600 px-3 py-1.5 rounded font-semibold">Meus Alertas</button>
+                            <button onclick="openEditProfileModal()" class="bg-gray-100 text-gray-700 px-3 py-1.5 rounded font-semibold">Editar Perfil</button>
                         </div>
                     </div>
-
-                    <div id="profile-sub-content">
-                        ${renderMyPostsHTML()}
-                    </div>
+                    ${renderMyPostsHTML()}
                 </div>
             `;
         }
@@ -1140,28 +1124,26 @@
         function renderMyPostsHTML() {
             const posts = JSON.parse(localStorage.getItem(STORAGE_KEYS.POSTS)) || [];
             const myPosts = posts.filter(p => p.userId === currentUser.id);
-
             return `
-                <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                    <div class="flex items-center justify-between mb-6">
-                        <h3 class="font-bold text-lg text-gray-900">Meus Alertas Publicados (${myPosts.length})</h3>
-                        <button onclick="openPostModal()" class="bg-brand-500 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-brand-600 transition shadow">Novo Alerta</button>
+                <div class="bg-white rounded p-4 shadow-sm border border-gray-200 text-xs">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-gray-900">Meus Alertas (${myPosts.length})</h3>
+                        <button onclick="openPostModal()" class="bg-brand-500 text-white px-3 py-1 rounded shadow">Novo Alerta</button>
                     </div>
-
-                    <div class="space-y-4">
-                        ${myPosts.length === 0 ? '<p class="text-sm text-gray-500 italic">Você ainda não publicou nenhum alerta de pet.</p>' : myPosts.map(post => `
-                            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-gray-50 rounded-xl gap-4">
-                                <div class="flex items-center space-x-4">
-                                    <img src="${post.photo}" class="w-16 h-16 rounded-xl object-cover" onerror="this.src='https://placehold.co/150x150/e07a5f/ffffff?text=Pet'">
+                    <div class="space-y-3">
+                        ${myPosts.length === 0 ? '<p class="text-gray-400 italic">Nenhum alerta publicado.</p>' : myPosts.map(post => `
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded gap-3">
+                                <div class="flex items-center space-x-3">
+                                    <img src="${post.photo}" class="w-12 h-12 rounded object-cover" onerror="this.src='https://placehold.co/100x100/e07a5f/ffffff?text=Pet'">
                                     <div>
-                                        <span class="px-2.5 py-0.5 bg-brand-100 text-brand-700 rounded-full text-[11px] font-semibold">${post.category}</span>
-                                        <h4 class="font-bold text-sm text-gray-900 mt-1">${post.breed} - ${post.location}</h4>
-                                        <p class="text-xs text-gray-500">Status: <span class="font-semibold ${post.status === 'Reunido' ? 'text-emerald-600' : 'text-brand-600'}">${post.status}</span></p>
+                                        <span class="px-2 py-0.5 bg-brand-100 text-brand-700 rounded text-[10px] font-semibold">${post.category}</span>
+                                        <h4 class="font-bold text-gray-900 mt-0.5">${post.breed} - ${post.location}</h4>
+                                        <p class="text-gray-500">Status: <span class="font-semibold ${post.status === 'Reunido' ? 'text-emerald-600' : 'text-brand-600'}">${post.status}</span></p>
                                     </div>
                                 </div>
-                                <div class="flex items-center space-x-2 w-full sm:w-auto justify-end">
-                                    <button onclick="openPostModal('${post.id}')" class="px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-xs font-medium text-gray-700 hover:bg-gray-100 transition">Editar</button>
-                                    <button onclick="deletePost('${post.id}')" class="px-3 py-1.5 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 transition">Excluir</button>
+                                <div class="flex space-x-2">
+                                    <button onclick="openPostModal('${post.id}')" class="px-2.5 py-1 bg-white border rounded font-medium text-gray-700">Editar</button>
+                                    <button onclick="deletePost('${post.id}')" class="px-2.5 py-1 bg-red-50 text-red-600 rounded font-medium">Excluir</button>
                                 </div>
                             </div>
                         `).join('')}
@@ -1170,25 +1152,18 @@
             `;
         }
 
-        function switchTabToMyPosts() {
-            renderMyPosts();
-        }
-
-        function renderMyPosts() {
-            renderProfileView();
-        }
+        function renderMyPosts() { renderProfileView(); }
 
         function deletePost(postId) {
-            if (confirm('Tem certeza que deseja excluir este alerta?')) {
+            if (confirm('Deseja excluir este alerta?')) {
                 let posts = JSON.parse(localStorage.getItem(STORAGE_KEYS.POSTS)) || [];
                 posts = posts.filter(p => p.id !== postId);
                 localStorage.setItem(STORAGE_KEYS.POSTS, JSON.stringify(posts));
-                showToast('Alerta excluído com sucesso.', 'success');
+                showToast('Alerta excluído.', 'success');
                 renderProfileView();
             }
         }
 
-        // Edit Profile Modal
         function openEditProfileModal() {
             const modalId = 'modal-edit-profile';
             let modal = document.getElementById(modalId);
@@ -1198,33 +1173,18 @@
                 modal.className = 'fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4';
                 document.body.appendChild(modal);
             }
-
             modal.innerHTML = `
-                <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
-                    <button onclick="closeModal('${modalId}')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
-                        <i class="fa-solid fa-xmark text-lg"></i>
-                    </button>
-                    <h3 class="text-xl font-bold text-gray-900 mb-4">Editar Perfil</h3>
-                    <form onsubmit="handleProfileUpdate(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Nome</label>
-                            <input type="text" id="edit-profile-name" value="${currentUser.name}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-brand-500">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Foto (URL Avatar)</label>
-                            <input type="url" id="edit-profile-avatar" value="${currentUser.avatar}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-brand-500">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Região / Cidade</label>
-                            <input type="text" id="edit-profile-region" value="${currentUser.region || ''}" placeholder="Ex: Itapetininga - SP" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-brand-500">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Biografia</label>
-                            <textarea id="edit-profile-bio" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-brand-500">${currentUser.bio || ''}</textarea>
-                        </div>
-                        <div class="flex justify-end space-x-3 pt-2">
-                            <button type="button" onclick="closeModal('${modalId}')" class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">Cancelar</button>
-                            <button type="submit" class="px-5 py-2 bg-brand-500 text-white font-medium rounded-lg text-sm hover:bg-brand-600 shadow">Salvar Alterações</button>
+                <div class="bg-white rounded max-w-sm w-full p-5 shadow-2xl relative text-xs">
+                    <button onclick="closeModal('${modalId}')" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-base"></i></button>
+                    <h3 class="font-bold text-sm text-gray-900 mb-3">Editar Perfil</h3>
+                    <form onsubmit="handleProfileUpdate(event)" class="space-y-3">
+                        <div><label class="block font-semibold text-gray-600 mb-1">Nome</label><input type="text" id="edit-profile-name" value="${currentUser.name}" required class="w-full px-2 py-1.5 border rounded"></div>
+                        <div><label class="block font-semibold text-gray-600 mb-1">Avatar URL</label><input type="url" id="edit-profile-avatar" value="${currentUser.avatar}" required class="w-full px-2 py-1.5 border rounded"></div>
+                        <div><label class="block font-semibold text-gray-600 mb-1">Região</label><input type="text" id="edit-profile-region" value="${currentUser.region || ''}" class="w-full px-2 py-1.5 border rounded"></div>
+                        <div><label class="block font-semibold text-gray-600 mb-1">Bio</label><textarea id="edit-profile-bio" rows="2" class="w-full px-2 py-1.5 border rounded">${currentUser.bio || ''}</textarea></div>
+                        <div class="flex justify-end space-x-2 pt-1">
+                            <button type="button" onclick="closeModal('${modalId}')" class="px-3 py-1.5 border rounded">Cancelar</button>
+                            <button type="submit" class="px-4 py-1.5 bg-brand-500 text-white rounded font-medium shadow">Salvar</button>
                         </div>
                     </form>
                 </div>
@@ -1234,45 +1194,26 @@
 
         function handleProfileUpdate(event) {
             event.preventDefault();
-            const name = document.getElementById('edit-profile-name').value.trim();
-            const avatar = document.getElementById('edit-profile-avatar').value.trim();
-            const region = document.getElementById('edit-profile-region').value.trim();
-            const bio = document.getElementById('edit-profile-bio').value.trim();
-
-            currentUser.name = name;
-            currentUser.avatar = avatar;
-            currentUser.region = region;
-            currentUser.bio = bio;
-
+            currentUser.name = document.getElementById('edit-profile-name').value.trim();
+            currentUser.avatar = document.getElementById('edit-profile-avatar').value.trim();
+            currentUser.region = document.getElementById('edit-profile-region').value.trim();
+            currentUser.bio = document.getElementById('edit-profile-bio').value.trim();
             localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(currentUser));
-
-            // Update in users array
             let users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS)) || [];
             const idx = users.findIndex(u => u.id === currentUser.id);
-            if (idx > -1) {
-                users[idx] = currentUser;
-                localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
-            }
-
+            if (idx > -1) { users[idx] = currentUser; localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users)); }
             closeModal('modal-edit-profile');
             updateNavigationUI();
             renderProfileView();
-            showToast('Perfil atualizado com sucesso!', 'success');
+            showToast('Perfil atualizado!', 'success');
         }
 
-        // Chat View Interface
         function renderChatView() {
-            if (!currentUser) {
-                openAuthModal('login');
-                return;
-            }
-
+            if (!currentUser) { openAuthModal('login'); return; }
             currentActiveTab = 'chats';
             const appView = document.getElementById('app-view');
             const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS)) || [];
             const chats = JSON.parse(localStorage.getItem(STORAGE_KEYS.CHATS)) || [];
-
-            // Get contacts (other users)
             const otherUsers = users.filter(u => u.id !== currentUser.id);
 
             if (!activeChatRecipient && otherUsers.length > 0) {
@@ -1285,187 +1226,96 @@
             ).sort((a, b) => a.createdAt - b.createdAt);
 
             appView.innerHTML = `
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden grid grid-cols-1 md:grid-cols-3 h-[70vh]">
-                    <!-- Contacts List -->
-                    <div class="border-r border-gray-100 flex flex-col bg-gray-50">
-                        <div class="p-4 border-b border-gray-100 bg-white">
-                            <h3 class="font-bold text-gray-900">Conversas Seguras</h3>
-                            <p class="text-xs text-gray-500">Privacidade protegida sem expor WhatsApp</p>
-                        </div>
+                <div class="bg-white rounded shadow-sm border border-gray-200 overflow-hidden grid grid-cols-1 md:grid-cols-3 h-[65vh] text-xs">
+                    <div class="border-r border-gray-200 flex flex-col bg-gray-50">
+                        <div class="p-3 border-b border-gray-200 bg-white"><h3 class="font-bold text-gray-800">Recados e Mensagens</h3></div>
                         <div class="overflow-y-auto flex-1 custom-scrollbar">
-                            ${otherUsers.length === 0 ? '<p class="p-4 text-xs text-gray-500">Nenhum outro usuário disponível.</p>' : otherUsers.map(u => `
-                                <div onclick="selectChatRecipient('${u.id}', '${u.name}')" class="p-3.5 flex items-center space-x-3 cursor-pointer hover:bg-gray-100 transition ${activeChatRecipient?.id === u.id ? 'bg-brand-50 border-l-4 border-brand-500' : ''}">
-                                    <img src="${u.avatar}" class="w-10 h-10 rounded-full object-cover">
-                                    <div class="flex-1 min-w-0">
-                                        <h4 class="font-bold text-sm text-gray-900 truncate">${u.name}</h4>
-                                        <p class="text-xs text-gray-500 truncate">${u.region || 'Itapetininga - SP'}</p>
-                                    </div>
+                            ${otherUsers.length === 0 ? '<p class="p-3 text-gray-400">Nenhum contato.</p>' : otherUsers.map(u => `
+                                <div onclick="selectChatRecipient('${u.id}', '${u.name}')" class="p-2.5 flex items-center space-x-2 cursor-pointer hover:bg-gray-100 ${activeChatRecipient?.id === u.id ? 'bg-brand-50 border-l-2 border-brand-500 font-bold' : ''}">
+                                    <img src="${u.avatar}" class="w-8 h-8 rounded-full object-cover">
+                                    <div class="truncate"><h4 class="text-gray-900">${u.name}</h4><p class="text-[10px] text-gray-400">${u.region || 'SP'}</p></div>
                                 </div>
                             `).join('')}
                         </div>
                     </div>
-
-                    <!-- Chat Active Conversation Area -->
                     <div class="md:col-span-2 flex flex-col bg-white">
                         ${activeChatRecipient ? `
-                            <div class="p-4 border-b border-gray-100 flex items-center space-x-3 bg-white">
-                                <div class="w-9 h-9 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-bold">
-                                    ${activeChatRecipient.name.charAt(0)}
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-sm text-gray-900">${activeChatRecipient.name}</h4>
-                                    <p class="text-[11px] text-emerald-600"><i class="fa-solid fa-shield-halved mr-1"></i>Chat Interno Criptografado e Seguro</p>
-                                </div>
+                            <div class="p-3 border-b border-gray-200 flex items-center space-x-2 bg-gray-50">
+                                <div class="w-7 h-7 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-bold text-xs">${activeChatRecipient.name.charAt(0)}</div>
+                                <div><h4 class="font-bold text-gray-800">${activeChatRecipient.name}</h4><p class="text-[9px] text-emerald-600">Chat Seguro Privado</p></div>
                             </div>
-
-                            <div id="chat-messages-container" class="flex-1 p-4 overflow-y-auto space-y-3 custom-scrollbar bg-gray-50">
-                                ${activeChats.length === 0 ? `
-                                    <div class="h-full flex flex-col items-center justify-center text-center text-gray-400">
-                                        <i class="fa-solid fa-comments text-3xl mb-2 text-brand-300"></i>
-                                        <p class="text-sm font-medium">Inicie uma conversa segura sobre o resgate com ${activeChatRecipient.name}.</p>
-                                    </div>
-                                ` : activeChats.map(msg => {
+                            <div id="chat-messages-container" class="flex-1 p-3 overflow-y-auto space-y-2 custom-scrollbar bg-gray-50">
+                                ${activeChats.length === 0 ? '<div class="h-full flex items-center justify-center text-gray-400">Inicie uma conversa segura.</div>' : activeChats.map(msg => {
                                     const isMe = msg.senderId === currentUser.id;
                                     return `
                                         <div class="flex ${isMe ? 'justify-end' : 'justify-start'}">
-                                            <div class="max-w-xs sm:max-w-md px-4 py-2.5 rounded-2xl text-sm ${isMe ? 'bg-brand-500 text-white rounded-br-none' : 'bg-white text-gray-800 border border-gray-100 rounded-bl-none shadow-sm'}">
+                                            <div class="max-w-xs px-3 py-1.5 rounded ${isMe ? 'bg-brand-500 text-white' : 'bg-white text-gray-800 border shadow-sm'}">
                                                 <p>${msg.text}</p>
-                                                <span class="block text-[10px] text-right mt-1 ${isMe ? 'text-brand-100' : 'text-gray-400'}">${new Date(msg.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                                                <span class="block text-[8px] text-right mt-0.5 ${isMe ? 'text-brand-100' : 'text-gray-400'}">${new Date(msg.createdAt).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
                                             </div>
                                         </div>
                                     `;
                                 }).join('')}
                             </div>
-
-                            <form onsubmit="handleSendMessage(event)" class="p-3 border-t border-gray-100 bg-white flex gap-2">
-                                <input type="text" id="chat-msg-input" required placeholder="Digite sua mensagem sobre o resgate..." class="flex-1 px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-brand-500">
-                                <button type="submit" class="bg-brand-500 text-white px-5 py-2.5 rounded-xl font-medium text-sm hover:bg-brand-600 transition shadow">Enviar</button>
+                            <form onsubmit="handleSendMessage(event)" class="p-2 border-t border-gray-200 bg-white flex gap-2">
+                                <input type="text" id="chat-msg-input" required placeholder="Digite sua mensagem..." class="flex-1 px-3 py-1.5 border rounded">
+                                <button type="submit" class="bg-brand-500 text-white px-4 py-1.5 rounded font-medium shadow">Enviar</button>
                             </form>
-                        ` : `
-                            <div class="h-full flex items-center justify-center text-gray-400 text-sm">
-                                Selecione um contato para iniciar a conversa.
-                            </div>
-                        `}
+                        ` : '<div class="h-full flex items-center justify-center text-gray-400">Selecione um contato.</div>'}
                     </div>
                 </div>
             `;
-
-            // Scroll chat to bottom
             const container = document.getElementById('chat-messages-container');
             if (container) container.scrollTop = container.scrollHeight;
         }
 
-        function selectChatRecipient(id, name) {
-            activeChatRecipient = { id, name };
-            renderChatView();
-        }
+        function selectChatRecipient(id, name) { activeChatRecipient = { id, name }; renderChatView(); }
 
         function handleSendMessage(event) {
             event.preventDefault();
             if (!currentUser || !activeChatRecipient) return;
-
             const input = document.getElementById('chat-msg-input');
             const text = input.value.trim();
             if (!text) return;
-
             let chats = JSON.parse(localStorage.getItem(STORAGE_KEYS.CHATS)) || [];
-            chats.push({
-                id: 'ch_' + Date.now(),
-                senderId: currentUser.id,
-                recipientId: activeChatRecipient.id,
-                text,
-                createdAt: Date.now()
-            });
-
+            chats.push({ id: 'ch_' + Date.now(), senderId: currentUser.id, recipientId: activeChatRecipient.id, text, createdAt: Date.now() });
             localStorage.setItem(STORAGE_KEYS.CHATS, JSON.stringify(chats));
             input.value = '';
             renderChatView();
         }
 
-        // Admin Dashboard & Moderation
         function renderAdminDashboard() {
             const appView = document.getElementById('app-view');
             const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS)) || [];
             const posts = JSON.parse(localStorage.getItem(STORAGE_KEYS.POSTS)) || [];
             const chats = JSON.parse(localStorage.getItem(STORAGE_KEYS.CHATS)) || [];
 
-            const activePosts = posts.filter(p => p.status === 'Procurando');
-            const resolvedPosts = posts.filter(p => p.status === 'Reunido');
-
             appView.innerHTML = `
-                <div class="space-y-6">
-                    <div class="bg-gradient-to-r from-secondary to-gray-900 rounded-2xl p-6 text-white shadow-md flex items-center justify-between">
+                <div class="space-y-4 text-xs">
+                    <div class="bg-gradient-to-r from-secondary to-gray-900 rounded p-4 text-white shadow flex items-center justify-between">
                         <div>
-                            <span class="bg-red-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">Painel Administrativo</span>
-                            <h2 class="text-2xl font-bold mt-2">Moderação e Controle AuChou</h2>
-                            <p class="text-gray-300 text-sm">Gestão completa de publicações, usuários e segurança da comunidade.</p>
+                            <span class="bg-red-500 text-white px-2 py-0.5 rounded text-[9px] uppercase font-bold">Admin Panel</span>
+                            <h2 class="text-lg font-bold mt-1">Moderação AuChou</h2>
                         </div>
-                        <button onclick="switchTab('feed')" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-xl text-sm font-medium transition">Voltar ao Feed</button>
+                        <button onclick="switchTab('feed')" class="bg-white/10 px-3 py-1.5 rounded hover:bg-white/20">Voltar</button>
                     </div>
-
-                    <!-- Statistics Grid -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-                            <p class="text-xs text-gray-500 uppercase font-semibold">Total de Pets</p>
-                            <h3 class="text-2xl font-bold text-gray-900 mt-1">${posts.length}</h3>
-                        </div>
-                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-                            <p class="text-xs text-gray-500 uppercase font-semibold">Alertas Ativos</p>
-                            <h3 class="text-2xl font-bold text-brand-600 mt-1">${activePosts.length}</h3>
-                        </div>
-                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-                            <p class="text-xs text-gray-500 uppercase font-semibold">Pets Reunidos</p>
-                            <h3 class="text-2xl font-bold text-emerald-600 mt-1">${resolvedPosts.length}</h3>
-                        </div>
-                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-                            <p class="text-xs text-gray-500 uppercase font-semibold">Usuários</p>
-                            <h3 class="text-2xl font-bold text-secondary mt-1">${users.length}</h3>
-                        </div>
-                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-                            <p class="text-xs text-gray-500 uppercase font-semibold">Mensagens Chat</p>
-                            <h3 class="text-2xl font-bold text-indigo-600 mt-1">${chats.length}</h3>
-                        </div>
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+                        <div class="bg-white p-3 rounded border"><p class="text-gray-400">Total Pets</p><h3 class="text-xl font-bold text-gray-800">${posts.length}</h3></div>
+                        <div class="bg-white p-3 rounded border"><p class="text-gray-400">Ativos</p><h3 class="text-xl font-bold text-brand-600">${posts.filter(p => p.status === 'Procurando').length}</h3></div>
+                        <div class="bg-white p-3 rounded border"><p class="text-gray-400">Reunidos</p><h3 class="text-xl font-bold text-emerald-600">${posts.filter(p => p.status === 'Reunido').length}</h3></div>
+                        <div class="bg-white p-3 rounded border"><p class="text-gray-400">Usuários</p><h3 class="text-xl font-bold text-secondary">${users.length}</h3></div>
+                        <div class="bg-white p-3 rounded border"><p class="text-gray-400">Mensagens</p><h3 class="text-xl font-bold text-indigo-600">${chats.length}</h3></div>
                     </div>
-
-                    <!-- Content Moderation Section -->
-                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="font-bold text-lg text-gray-900 mb-4">Moderação de Publicações</h3>
-                        <div class="space-y-3">
+                    <div class="bg-white rounded p-4 border">
+                        <h3 class="font-bold text-sm text-gray-800 mb-3">Moderação de Posts</h3>
+                        <div class="space-y-2">
                             ${posts.map(post => `
-                                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl gap-4">
-                                    <div class="flex items-center space-x-3">
-                                        <img src="${post.photo}" class="w-12 h-12 rounded-xl object-cover" onerror="this.src='https://placehold.co/100x100/e07a5f/ffffff?text=Pet'">
-                                        <div>
-                                            <h4 class="font-bold text-sm text-gray-900">${post.category}: ${post.breed} (${post.status})</h4>
-                                            <p class="text-xs text-gray-500">Tutor: ${post.userName} | Local: ${post.location}</p>
-                                        </div>
+                                <div class="flex items-center justify-between p-2.5 bg-gray-50 rounded">
+                                    <div class="flex items-center space-x-2">
+                                        <img src="${post.photo}" class="w-10 h-10 rounded object-cover" onerror="this.src='https://placehold.co/100x100/e07a5f/ffffff?text=Pet'">
+                                        <div><h4 class="font-bold text-gray-900">${post.category}: ${post.breed}</h4><p class="text-[10px] text-gray-500">Tutor: ${post.userName}</p></div>
                                     </div>
-                                    <div class="flex space-x-2">
-                                        <button onclick="adminDeletePost('${post.id}')" class="px-3 py-1.5 bg-red-100 text-red-700 rounded-lg text-xs font-semibold hover:bg-red-200 transition">Remover Post</button>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-
-                    <!-- Users Management Section -->
-                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="font-bold text-lg text-gray-900 mb-4">Gerenciamento de Usuários</h3>
-                        <div class="space-y-3">
-                            ${users.map(u => `
-                                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl gap-4">
-                                    <div class="flex items-center space-x-3">
-                                        <img src="${u.avatar}" class="w-10 h-10 rounded-full object-cover">
-                                        <div>
-                                            <h4 class="font-bold text-sm text-gray-900">${u.name} ${u.email === ADMIN_EMAIL ? '<span class="text-[10px] bg-red-100 text-red-700 px-2 py-0.5 rounded-full ml-1">Admin</span>' : ''}</h4>
-                                            <p class="text-xs text-gray-500">${u.email} | ${u.region || 'Itapetininga - SP'}</p>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        ${u.email !== ADMIN_EMAIL ? `
-                                            <button onclick="adminBlockUser('${u.id}')" class="px-3 py-1.5 bg-red-50 text-red-600 rounded-lg text-xs font-semibold hover:bg-red-100 transition">Bloquear Usuário</button>
-                                        ` : '<span class="text-xs text-gray-400 font-semibold">Conta Principal</span>'}
-                                    </div>
+                                    <button onclick="adminDeletePost('${post.id}')" class="px-2.5 py-1 bg-red-100 text-red-700 rounded font-semibold">Remover</button>
                                 </div>
                             `).join('')}
                         </div>
@@ -1475,38 +1325,17 @@
         }
 
         function adminDeletePost(postId) {
-            if (confirm('Tem certeza que deseja remover esta postagem por moderação?')) {
+            if (confirm('Remover postagem?')) {
                 let posts = JSON.parse(localStorage.getItem(STORAGE_KEYS.POSTS)) || [];
                 posts = posts.filter(p => p.id !== postId);
                 localStorage.setItem(STORAGE_KEYS.POSTS, JSON.stringify(posts));
-                showToast('Publicação removida pela moderação.', 'success');
+                showToast('Post removido.', 'success');
                 renderAdminDashboard();
             }
         }
 
-        function adminBlockUser(userId) {
-            if (confirm('Deseja bloquear este usuário e remover suas postagens?')) {
-                let users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS)) || [];
-                users = users.filter(u => u.id !== userId);
-                localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
-
-                let posts = JSON.parse(localStorage.getItem(STORAGE_KEYS.POSTS)) || [];
-                posts = posts.filter(p => p.userId !== userId);
-                localStorage.setItem(STORAGE_KEYS.POSTS, JSON.stringify(posts));
-
-                showToast('Usuário bloqueado e posts removidos.', 'success');
-                renderAdminDashboard();
-            }
-        }
-
-        // About & Privacy Modals
-        function showAboutModal() {
-            alertModal('Sobre o AuChou', 'O AuChou é um protótipo acadêmico de rede social voltada para pets perdidos e achados. Seu objetivo é agilizar resgates com segurança, privacidade no chat interno e sem exposição de dados pessoais de contato.');
-        }
-
-        function showPrivacyModal() {
-            alertModal('Privacidade e Segurança', 'O AuChou substitui a exposição pública de números de telefone e WhatsApp por um sistema de chat interno criptografado simulado, garantindo que os tutores possam negociar o resgate dos animais com total segurança.');
-        }
+        function showAboutModal() { alertModal('Sobre', 'AuChou é um protótipo acadêmico de rede social para pets perdidos.'); }
+        function showPrivacyModal() { alertModal('Privacidade', 'Privacidade garantida via chat interno seguro.'); }
 
         function alertModal(title, text) {
             const modalId = 'modal-alert';
@@ -1518,10 +1347,10 @@
                 document.body.appendChild(modal);
             }
             modal.innerHTML = `
-                <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl text-center">
-                    <h3 class="text-lg font-bold text-gray-900 mb-2">${title}</h3>
-                    <p class="text-sm text-gray-600 mb-6 leading-relaxed">${text}</p>
-                    <button onclick="closeModal('${modalId}')" class="w-full bg-brand-500 text-white font-medium py-2 rounded-xl text-sm hover:bg-brand-600 shadow">Entendido</button>
+                <div class="bg-white rounded max-w-sm w-full p-5 shadow-2xl text-center text-xs">
+                    <h3 class="font-bold text-sm text-gray-900 mb-2">${title}</h3>
+                    <p class="text-gray-600 mb-4">${text}</p>
+                    <button onclick="closeModal('${modalId}')" class="w-full bg-brand-500 text-white py-2 rounded font-medium">Entendido</button>
                 </div>
             `;
             modal.classList.remove('hidden');

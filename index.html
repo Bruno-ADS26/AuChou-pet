@@ -190,12 +190,11 @@
             <form id="formAuth" onsubmit="processarAuth(event)" class="space-y-4">
                 <div id="divNome" class="hidden">
                     <label class="block text-sm font-medium mb-1">Seu Nome Completo</label>
-                    <input type="text" id="authNome" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-amber-500" placeholder="Bruno Oliveira">
+                    <input type="text" id="authNome" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-amber-500" placeholder="Nome Completo">
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-1">E-mail</label>
-                    <input type="email5" id="authEmail" required class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-amber-500" placeholder="seu-email@gmail.com">
-                    <p class="text-xs text-amber-600 mt-1">Dica: bruninho0861@gmail.com concede acesso Administrador.</p>
+                    <input type="email" id="authEmail" required class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-amber-500" placeholder="seu-email@gmail.com">
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-1">Senha</label>
@@ -219,7 +218,7 @@
     <script>
         // Inicialização de Dados LocalStorage
         let usuarios = JSON.parse(localStorage.getItem('auchou_usuarios')) || [
-            { nome: "Administrador Master", email: "bruninho0861@gmail.com", senha: "123", tipo: "Administrador" }
+            { nome: "Administrador", email: "bruninho0861@gmail.com", senha: "123", tipo: "Administrador" }
         ];
         
         let posts = JSON.parse(localStorage.getItem('auchou_posts')) || [
@@ -307,7 +306,7 @@
                     alert('Este e-mail já está cadastrado!');
                     return;
                 }
-                // Regra estrita de Administrador por e-mail exclusivo
+                // Regra oculta de Administrador por e-mail exclusivo
                 const tipo = (email === 'bruninho0861@gmail.com') ? 'Administrador' : 'Usuário Comum';
                 const novoUsuario = { nome, email, senha, tipo };
                 usuarios.push(novoUsuario);
@@ -320,7 +319,6 @@
                     alert('E-mail ou senha incorretos!');
                     return;
                 }
-                // Força atualização caso logue com o e-mail de admin
                 if(email === 'bruninho0861@gmail.com') user.tipo = 'Administrador';
                 usuarioLogado = user;
                 salvarDados();

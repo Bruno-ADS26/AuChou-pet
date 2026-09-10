@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuChou Pet - Rede Social de Pets Perdidos e Achados</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="h-full bg-slate-50 text-slate-800 font-sans flex flex-col justify-between">
+
+    <script>
+        const ADMIN_EMAIL = 'gemini.user@auchoupet.com'; // E-mail exclusivo do Administrador
+
+        const DEFAULT_USERS = [
+            { id: 1, name: 'Administrador Mestre', email: ADMIN_EMAIL, pass: 'admin123', role: 'admin', status: 'ativo' },
+            { id: 2, name: 'Maria Silva', email: 'maria@gmail.com', pass: '123456', role: 'comum', status: 'ativo' }
+        ];
+
+        const DEFAULT_POSTS = [
+            {
+                id: 1,
+                userId: 2,
+                userName: 'Maria Silva',
+                userRole: 'comum',
+                petName: 'Mel (Golden Retriever)',
+                statusPet: 'Perdido', // Perdido, Achado, Reunido
+                location: 'Parque Ibirapuera, São Paulo - SP',
+                date: '10/09/2026',
+                description: 'Minha cachorrinha fugiu perto do portão 7. Ela usa coleira rosa e é muito dócil. Por favor, qualquer informação entre em contato!',
+                image: 'https://placehold.co/600x400/dcfce7/16a34a?text=Golden+Retriever+-+Perdido',
+                protocol: 'AP-2026-8492',
+                likes: 4,
+                comments: [
+                    { user: 'Equipe AuChou Pet', text: 'Compartilhamos no perfil da rede. Boa sorte na busca!' }
+                ]
+            },
+            {
+                id: 2,
+                userId: 1,
+                userName: 'Administrador Mestre',
+                userRole: 'admin',
+                petName: 'Gatinho Sr. Bigodes',
+                statusPet: 'Achado',
+                location: 'Rua Augusta, Centro, São Paulo - SP',
+                date: '09/09/2026',
+                description: 'Encontramos este gatinho cinza circulando acuado em frente a uma padaria. Está abrigado temporariamente.',
+                image: 'https://placehold.co/600x400/e0f2fe/0284c7?text=Gato+Cinza+-+Achado',
+                protocol: 'AP-2026-3810',
+                likes: 7,
+                comments: []
+            }
+        ];
+
+        const DEFAULT_CHATS = [
+            {
+                chatId: '2_1_1',
+                postId: 1,
+                participants: [2, 1],
+                messages: [
+                    { sender: 1, text: 'Olá Maria, vi sua publicação sobre a Mel. Moro perto do parque, vou ficar atento!' },
+                    { sender: 2, text: 'Muito obrigada! Qualquer pista me avise por aqui.' }
+                ]
+            }
+        ];
+
+        function initStorage() {
+            if (!localStorage.getItem('ap_users')) localStorage.setItem('ap_users', JSON.stringify(DEFAULT_USERS));
+            if (!localStorage.getItem('ap_posts')) localStorage.setItem('ap_posts', JSON.stringify(DEFAULT_POSTS));
+            if (!localStorage.getItem('ap_chats')) localStorage.setItem('ap_chats', JSON.stringify(DEFAULT_CHATS));
+            if (!localStorage.getItem('ap_session')) localStorage.setItem('ap_session', JSON.stringify(null));
+        }
+        initStorage();
+
+        function getSession() { return JSON.parse(localStorage.getItem('ap_session')); }
+        function setSession(user) { localStorage.setItem('ap_session', JSON.stringify(user)); }
+    </script>
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="router('feed')">
+                <div class="w-10 h-10 bg-brand-500 rounded-full flex items-center justify-center text-white shadow-md">
+                    <i class="fa-solid fa-paw text-xl"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-bold bg-gradient-to-r from-brand-700 to-brand-500 bg-clip-text text-transparent">AuChou Pet</span>
+                    <span class="block text-xs text-slate-500 font-medium">Rede Social Solidária</span>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-3" id="nav-container">
+                <!-- Preenchido dinamicamente via JavaScript -->
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6" id="main-content">
+        <!-- Conteúdo injetado via JS -->
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center text-sm text-slate-500">
+            <p>&copy; 2026 AuChou Pet - Projeto Integrador MVP. Conectando Vidas e Reunindo Famílias.</p>
+            <p class="mt-1 text-xs text-slate-400">Perfis Ativos: Usuário Comum e Administrador do Sistema.</p>
+        </div>
+    </footer>
+
+    <div id="modal-container"></div>
+
+    <script>
+        function showNotification(message, type = 'success') {
+            const existing = document.getElementById('toast-notification');
+            if (existing) existing.remove();
+
+            const toast = document.createElement('div');
+            toast.id = 'toast-notification';
+            toast.className = `fixed bottom-5 right-5 z-50 px-5 py-3 rounded-xl shadow-xl text-white font-medium transition-all transform duration-300 translate-y-2 opacity-0 flex items-center space-x-3 ${type === 'success' ? 'bg-emerald-600' : 'bg-red-600'}`;
+            toast.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation'} text-lg"></i><span>${message}</span>`;
+            
+            document.body.appendChild(toast);
+            setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 50);
+            setTimeout(() => {
+                toast.classList.add('translate-y-2', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        function router(view, param = null) {
+            const session = getSession();
+            renderNavbar();
+
+            const content = document.getElementById('main-content');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            switch(view) {
+                case 'feed':
+                    renderFeed(content);
+                    break;
+                case 'login':
+                    renderLogin(content);
+                    break;
+                case 'register':
+                    renderRegister(content);
+                    break;
+                case 'new-post':
+                    if (!session) { showNotification('Faça login para publicar!', 'error'); router('login'); return; }
+                    renderNewPost(content);
+                    break;
+                case 'profile':
+                    if (!session) { router('login'); return; }
+                    renderProfile(content);
+                    break;
+                case 'admin':
+                    if (!session || session.role !== 'admin') { showNotification('Acesso restrito ao Administrador!', 'error'); router('feed'); return; }
+                    renderAdminDashboard(content);
+                    break;
+                case 'chat':
+                    if (!session) { router('login'); return; }
+                    renderChatView(content, param);
+                    break;
+                default:
+                    renderFeed(content);
+            }
+        }
+
+        function renderNavbar() {
+            const session = getSession();
+            const container = document.getElementById('nav-container');
+
+            if (!session) {
+                container.innerHTML = `
+                    <button onclick="router('feed')" class="text-slate-600 hover:text-brand-600 font-medium px-3 py-2 text-sm transition">Feed</button>
+                    <button onclick="router('login')" class="text-brand-600 border border-brand-600 hover:bg-brand-50 px-4 py-2 rounded-xl text-sm font-semibold transition">Entrar</button>
+                    <button onclick="router('register')" class="bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-md shadow-brand-500/20 transition">Cadastrar</button>
+                `;
+            } else {
+                let adminBtn = session.role === 'admin' ? `<button onclick="router('admin')" class="bg-purple-100 text-purple-700 hover:bg-purple-200 px-3 py-2 rounded-xl text-sm font-semibold transition flex items-center space-x-1"><i class="fa-solid fa-shield-halved"></i><span class="hidden sm:inline">Administrador</span></button>` : '';
+                
+                container.innerHTML = `
+                    <button onclick="router('feed')" class="text-slate-600 hover:text-brand-600 font-medium px-3 py-2 text-sm transition"><i class="fa-solid fa-house mr-1"></i> Feed</button>
+                    <button onclick="router('new-post')" class="bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-md shadow-brand-500/20 transition flex items-center space-x-1.5"><i class="fa-solid fa-plus"></i><span>Publicar Pet</span></button>
+                    ${adminBtn}
+                    <div class="relative flex items-center space-x-2 pl-2 border-l border-slate-200">
+                        <div onclick="router('profile')" class="cursor-pointer flex items-center space-x-2 group">
+                            <div class="w-9 h-9 bg-slate-200 rounded-full flex items-center justify-center font-bold text-slate-700 group-hover:bg-brand-100 group-hover:text-brand-700 transition">
+                                ${session.name.charAt(0)}
+                            </div>
+                            <div class="hidden md:block text-left">
+                                <span class="block text-xs font-semibold text-slate-800">${session.name}</span>
+                                <span class="block text-[10px] text-slate-400 capitalize">${session.role === 'admin' ? 'Administrador' : 'Usuário Comum'}</span>
+                            </div>
+                        </div>
+                        <button onclick="logout()" title="Sair" class="text-slate-400 hover:text-red-600 p-2 transition"><i class="fa-solid fa-right-from-bracket"></i></button>
+                    </div>
+                `;
+            }
+        }
+
+        function logout() {
+            setSession(null);
+            showNotification('Sessão encerrada com sucesso.', 'success');
+            router('feed');
+        }
+
+        function renderFeed(container, filterStatus = 'Todos', searchTerm = '') {
+            const posts = JSON.parse(localStorage.getItem('ap_posts')) || [];
+
+            let filtered = posts.filter(p => {
+                const matchStatus = filterStatus === 'Todos' || p.statusPet === filterStatus;
+                const matchSearch = p.petName.toLowerCase().includes(searchTerm.toLowerCase()) || p.location.toLowerCase().includes(searchTerm.toLowerCase()) || p.description.toLowerCase().includes(searchTerm.toLowerCase());
+                return matchStatus && matchSearch;
+            });
+
+            let postsHtml = filtered.map(post => {
+                let badgeColor = post.statusPet === 'Perdido' ? 'bg-red-100 text-red-700 border-red-200' : (post.statusPet === 'Achado' ? 'bg-amber-100 text-amber-700 border-amber-200' : 'bg-emerald-100 text-emerald-700 border-emerald-200');
+                
+                let commentsHtml = post.comments.map(c => `
+                    <div class="bg-slate-50 p-2.5 rounded-xl text-xs mt-1.5 border border-slate-100">
+                        <span class="font-bold text-slate-700">${c.user}:</span> ${c.text}
+                    </div>
+                `).join('');
+
+                return `
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6 transition hover:shadow-md">
+                        <div class="p-4 flex items-center justify-between border-b border-slate-100">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-brand-100 rounded-full flex items-center justify-center font-bold text-brand-700">
+                                    ${post.userName.charAt(0)}
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-sm text-slate-800 flex items-center space-x-1.5">
+                                        <span>${post.userName}</span>
+                                        ${post.userRole === 'admin' ? '<i class="fa-solid fa-shield-halved text-purple-600 text-xs" title="Administrador"></i>' : ''}
+                                    </h4>
+                                    <span class="text-xs text-slate-400"><i class="fa-solid fa-location-dot mr-1"></i>${post.location} • ${post.date}</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-[10px] font-mono bg-slate-100 text-slate-600 px-2 py-0.5 rounded border border-slate-200">${post.protocol}</span>
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold border ${badgeColor}">${post.statusPet}</span>
+                            </div>
+                        </div>
+
+                        <div class="p-4 pb-2">
+                            <h3 class="font-bold text-base text-slate-800 mb-1">${post.petName}</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-3">${post.description}</p>
+                        </div>
+
+                        <div class="w-full bg-slate-100 max-h-96 overflow-hidden flex items-center justify-center">
+                            <img src="${post.image}" alt="Foto do Pet" class="w-full h-auto object-cover max-h-96" onerror="this.src='https://placehold.co/600x400/e2e8f0/64748b?text=Imagem+Indisponível'">
+                        </div>
+
+                        <div class="p-4 border-t border-slate-100">
+                            <div class="flex items-center justify-between mb-3 text-slate-500 text-sm">
+                                <button onclick="likePost(${post.id})" class="hover:text-red-500 transition flex items-center space-x-1.5">
+                                    <i class="fa-solid fa-heart text-red-500"></i>
+                                    <span>${post.likes} Curtidas</span>
+                                </button>
+                                <button onclick="openChatWithPoster(${post.userId}, ${post.id})" class="bg-brand-50 hover:bg-brand-100 text-brand-700 px-4 py-2 rounded-xl text-xs font-semibold transition flex items-center space-x-1.5 border border-brand-200">
+                                    <i class="fa-solid fa-comments"></i>
+                                    <span>Conversar com quem publicou</span>
+                                </button>
+                            </div>
+
+                            <div class="mt-3 pt-3 border-t border-slate-100">
+                                <div id="comments-list-${post.id}" class="space-y-1 mb-2">
+                                    ${commentsHtml}
+                                </div>
+                                <div class="flex items-center space-x-2 mt-2">
+                                    <input type="text" id="comment-input-${post.id}" placeholder="Escreva um comentário ou dica..." class="flex-grow bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-brand-500">
+                                    <button onclick="addComment(${post.id})" class="bg-slate-800 hover:bg-slate-900 text-white px-3 py-2 rounded-xl text-xs font-semibold transition">Comentar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = `
+                <div class="max-w-2xl mx-auto">
+                    <div class="bg-gradient-to-r from-brand-600 to-emerald-500 rounded-2xl p-6 text-white mb-6 shadow-lg flex items-center justify-between">
+                        <div>
+                            <h1 class="text-2xl font-bold mb-1">AuChou Pet</h1>
+                            <p class="text-brand-50 text-sm">Ajude animais perdidos a voltarem para casa ou encontre seu companheiro.</p>
+                        </div>
+                        <button onclick="router('new-post')" class="bg-white text-brand-700 hover:bg-brand-50 font-bold px-4 py-3 rounded-xl text-sm shadow-md transition whitespace-nowrap hidden sm:block">
+                            <i class="fa-solid fa-camera mr-2"></i>Postar Pet
+                        </button>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm mb-6 space-y-3">
+                        <div class="flex items-center space-x-2">
+                            <div class="relative flex-grow">
+                                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-400 text-sm"></i>
+                                <input type="text" id="search-input" value="${searchTerm}" oninput="filterFeedData()" placeholder="Pesquisar por nome, raça ou local..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-2 pt-1">
+                            <span class="text-xs font-semibold text-slate-500 flex items-center mr-1">Filtrar:</span>
+                            <button onclick="setFeedFilter('Todos')" class="px-3 py-1 rounded-xl text-xs font-semibold transition ${filterStatus === 'Todos' ? 'bg-brand-500 text-white shadow-sm' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">Todos</button>
+                            <button onclick="setFeedFilter('Perdido')" class="px-3 py-1 rounded-xl text-xs font-semibold transition ${filterStatus === 'Perdido' ? 'bg-red-500 text-white shadow-sm' : 'bg-red-50 text-red-700 hover:bg-red-100'}">Perdidos</button>
+                            <button onclick="setFeedFilter('Achado')" class="px-3 py-1 rounded-xl text-xs font-semibold transition ${filterStatus === 'Achado' ? 'bg-amber-500 text-white shadow-sm' : 'bg-amber-50 text-amber-700 hover:bg-amber-100'}">Achados</button>
+                            <button onclick="setFeedFilter('Reunido')" class="px-3 py-1 rounded-xl text-xs font-semibold transition ${filterStatus === 'Reunido' ? 'bg-emerald-500 text-white shadow-sm' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'}">Reunidos</button>
+                        </div>
+                    </div>
+
+                    <div id="posts-feed-container">
+                        ${filtered.length > 0 ? postsHtml : '<div class="text-center py-12 bg-white rounded-2xl border border-slate-200 text-slate-400">Nenhuma publicação encontrada com esses critérios.</div>'}
+                    </div>
+                </div>
+            `;
+        }
+
+        let currentFilter = 'Todos';
+        function setFeedFilter(status) {
+            currentFilter = status;
+            const searchVal = document.getElementById('search-input') ? document.getElementById('search-input').value : '';
+            renderFeed(document.getElementById('main-content'), currentFilter, searchVal);
+        }
+
+        function filterFeedData() {
+            const searchVal = document.getElementById('search-input').value;
+            renderFeed(document.getElementById('main-content'), currentFilter, searchVal);
+        }
+
+        function likePost(postId) {
+            let posts = JSON.parse(localStorage.getItem('ap_posts'));
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                post.likes += 1;
+                localStorage.setItem('ap_posts', JSON.stringify(posts));
+                renderFeed(document.getElementById('main-content'), currentFilter, document.getElementById('search-input') ? document.getElementById('search-input').value : '');
+            }
+        }
+
+        function addComment(postId) {
+            const session = getSession();
+            if (!session) {
+                showNotification('Você precisa estar logado para comentar!', 'error');
+                router('login');
+                return;
+            }
+            const input = document.getElementById(`comment-input-${postId}`);
+            const text = input.value.trim();
+            if (!text) return;
+
+            let posts = JSON.parse(localStorage.getItem('ap_posts'));
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                post.comments.push({ user: session.name, text: text });
+                localStorage.setItem('ap_posts', JSON.stringify(posts));
+                showNotification('Comentário adicionado!', 'success');
+                renderFeed(document.getElementById('main-content'), currentFilter, document.getElementById('search-input') ? document.getElementById('search-input').value : '');
+            }
+        }
+
+        function renderLogin(container) {
+            container.innerHTML = `
+                <div class="max-w-md mx-auto bg-white rounded-2xl border border-slate-200 shadow-sm p-8 mt-10">
+                    <div class="text-center mb-6">
+                        <div class="w-12 h-12 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center mx-auto mb-3 text-xl font-bold">
+                            <i class="fa-solid fa-lock"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-slate-800">Acesse sua Conta</h2>
+                        <p class="text-slate-500 text-sm mt-1">AuChou Pet - Rede Social</p>
+                    </div>
+
+                    <form onsubmit="handleLogin(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">E-mail</label>
+                            <input type="email" id="login-email" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500" placeholder="exemplo@email.com">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Senha</label>
+                            <input type="password" id="login-pass" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500" placeholder="Sua senha">
+                        </div>
+                        <button type="submit" class="w-full bg-brand-500 hover:bg-brand-600 text-white font-semibold py-3 rounded-xl transition shadow-md shadow-brand-500/20">Entrar no Sistema</button>
+                    </form>
+
+                    <div class="mt-6 pt-6 border-t border-slate-100 text-center text-sm text-slate-500">
+                        Não tem uma conta? <button onclick="router('register')" class="text-brand-600 font-semibold hover:underline">Cadastre-se</button>
+                    </div>
+
+                    <div class="mt-4 bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs text-slate-500">
+                        <span class="font-bold block mb-1 text-slate-700">Contas de Teste:</span>
+                        • Administrador: <code class="text-brand-600">gemini.user@auchoupet.com</code> / <code class="text-brand-600">admin123</code><br>
+                        • Usuário Comum: <code class="text-brand-600">maria@gmail.com</code> / <code class="text-brand-600">123456</code>
+                    </div>
+                </div>
+            `;
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-pass').value;
+
+            const users = JSON.parse(localStorage.getItem('ap_users')) || [];
+            const user = users.find(u => u.email === email && u.pass === pass);
+
+            if (user) {
+                if (user.status === 'inativo') {
+                    showNotification('Esta conta foi desativada pelo Administrador.', 'error');
+                    return;
+                }
+                setSession(user);
+                showNotification(`Bem-vindo de volta, ${user.name}!`, 'success');
+                router('feed');
+            } else {
+                showNotification('E-mail ou senha incorretos.', 'error');
+            }
+        }
+
+        function renderRegister(container) {
+            container.innerHTML = `
+                <div class="max-w-md mx-auto bg-white rounded-2xl border border-slate-200 shadow-sm p-8 mt-10">
+                    <div class="text-center mb-6">
+                        <div class="w-12 h-12 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center mx-auto mb-3 text-xl font-bold">
+                            <i class="fa-solid fa-user-plus"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-slate-800">Crie sua Conta</h2>
+                        <p class="text-slate-500 text-sm mt-1">AuChou Pet - Cadastro de Novo Usuário</p>
+                    </div>
+
+                    <form onsubmit="handleRegister(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Nome Completo</label>
+                            <input type="text" id="reg-name" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500" placeholder="Seu nome">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">E-mail</label>
+                            <input type="email" id="reg-email" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500" placeholder="exemplo@email.com">
+                            <p class="text-[11px] text-slate-400 mt-1">Nota: Se cadastrar com o seu e-mail exclusivo (${ADMIN_EMAIL}), você receberá automaticamente privilégios de Administrador.</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Senha</label>
+                            <input type="password" id="reg-pass" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500" placeholder="Mínimo 6 caracteres">
+                        </div>
+                        <button type="submit" class="w-full bg-brand-500 hover:bg-brand-600 text-white font-semibold py-3 rounded-xl transition shadow-md shadow-brand-500/20">Cadastrar Conta</button>
+                    </form>
+
+                    <div class="mt-6 pt-6 border-t border-slate-100 text-center text-sm text-slate-500">
+                        Já tem uma conta? <button onclick="router('login')" class="text-brand-600 font-semibold hover:underline">Faça login</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value.trim().toLowerCase();
+            const pass = document.getElementById('reg-pass').value;
+
+            let users = JSON.parse(localStorage.getItem('ap_users')) || [];
+            if (users.some(u => u.email === email)) {
+                showNotification('Este e-mail já está cadastrado no sistema.', 'error');
+                return;
+            }
+
+            // Atribui perfil de administrador exclusivamente para o seu e-mail, caso contrário usuário comum
+            const role = (email === ADMIN_EMAIL.toLowerCase()) ? 'admin' : 'comum';
+
+            const newUser = {
+                id: Date.now(),
+                name,
+                email,
+                pass,
+                role,
+                status: 'ativo'
+            };
+
+            users.push(newUser);
+            localStorage.setItem('ap_users', JSON.stringify(users));
+            setSession(newUser);
+            showNotification(role === 'admin' ? 'Conta de Administrador criada com sucesso!' : 'Cadastro como Usuário Comum realizado com sucesso!', 'success');
+            router('feed');
+        }
+
+        function renderNewPost(container) {
+            container.innerHTML = `
+                <div class="max-w-xl mx-auto bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-1 flex items-center space-x-2">
+                        <i class="fa-solid fa-bullhorn text-brand-500"></i>
+                        <span>Publicar Pet Perdido ou Encontrado</span>
+                    </h2>
+                    <p class="text-slate-500 text-sm mb-6">Preencha os detalhes para gerar protocolo e alertar a comunidade.</p>
+
+                    <form onsubmit="handleNewPost(event)" class="space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Status da Situação</label>
+                                <select id="post-status" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
+                                    <option value="Perdido">Pet Perdido (Sumiu)</option>
+                                    <option value="Achado">Pet Encontrado na rua</option>
+                                    <option value="Reunido">Reunido com a Família (Resolvido)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Nome ou Raça do Pet</label>
+                                <input type="text" id="post-petname" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500" placeholder="Ex: Poodle caramelo ou Mel">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Localização (Bairro / Cidade - UF)</label>
+                            <input type="text" id="post-location" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500" placeholder="Ex: Bairro Centro, São Paulo - SP">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Link da Foto (URL da Imagem)</label>
+                            <input type="url" id="post-image" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500" placeholder="https://exemplo.com/foto-pet.jpg">
+                            <p class="text-xs text-slate-400 mt-1">Dica: Você pode usar links públicos ou placeholders como https://placehold.co/600x400</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Descrição Detalhada</label>
+                            <textarea id="post-desc" rows="4" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500" placeholder="Descreva características físicas, coleira, comportamento..."></textarea>
+                        </div>
+
+                        <div class="flex space-x-3 pt-2">
+                            <button type="button" onclick="router('feed')" class="w-1/3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3 rounded-xl transition">Cancelar</button>
+                            <button type="submit" class="w-2/3 bg-brand-500 hover:bg-brand-600 text-white font-semibold py-3 rounded-xl transition shadow-md shadow-brand-500/20">Publicar com Protocolo</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+        }
+
+        function handleNewPost(e) {
+            e.preventDefault();
+            const session = getSession();
+            if (!session) return router('login');
+
+            const statusPet = document.getElementById('post-status').value;
+            const petName = document.getElementById('post-petname').value;
+            const location = document.getElementById('post-location').value;
+            const image = document.getElementById('post-image').value;
+            const description = document.getElementById('post-desc').value;
+            const protocol = `AP-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+
+            let posts = JSON.parse(localStorage.getItem('ap_posts')) || [];
+
+            const newPost = {
+                id: Date.now(),
+                userId: session.id,
+                userName: session.name,
+                userRole: session.role,
+                petName,
+                statusPet,
+                location,
+                date: new Date().toLocaleDateString('pt-BR'),
+                description,
+                image,
+                protocol,
+                likes: 0,
+                comments: []
+            };
+
+            posts.unshift(newPost);
+            localStorage.setItem('ap_posts', JSON.stringify(posts));
+            showNotification(`Publicação criada! Protocolo: ${protocol}`, 'success');
+            router('feed');
+        }
+
+        function renderAdminDashboard(container) {
+            const users = JSON.parse(localStorage.getItem('ap_users')) || [];
+            const posts = JSON.parse(localStorage.getItem('ap_posts')) || [];
+
+            let usersHtml = users.map(u => `
+                <tr class="border-b border-slate-100 hover:bg-slate-50 text-sm">
+                    <td class="py-3 px-4 font-semibold text-slate-800">${u.name}</td>
+                    <td class="py-3 px-4 text-slate-500">${u.email}</td>
+                    <td class="py-3 px-4"><span class="px-2 py-1 bg-slate-100 rounded-md text-xs font-semibold text-slate-700">${u.role === 'admin' ? 'Administrador' : 'Usuário Comum'}</span></td>
+                    <td class="py-3 px-4"><span class="px-2 py-1 rounded-full text-xs font-semibold ${u.status === 'ativo' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}">${u.status}</span></td>
+                    <td class="py-3 px-4 text-right">
+                        ${u.id !== 1 ? `<button onclick="toggleUserStatus(${u.id})" class="text-xs font-semibold px-3 py-1 rounded-lg ${u.status === 'ativo' ? 'bg-red-50 text-red-600 hover:bg-red-100' : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100'} transition">${u.status === 'ativo' ? 'Desativar' : 'Ativar'}</button>` : '<span class="text-xs text-slate-400">Principal</span>'}
+                    </td>
+                </tr>
+            `).join('');
+
+            container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="bg-slate-900 text-white p-6 rounded-2xl shadow-md flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                        <div>
+                            <h1 class="text-2xl font-bold mb-1"><i class="fa-solid fa-shield-halved mr-2 text-purple-400"></i>Painel do Administrador</h1>
+                            <p class="text-slate-400 text-sm">Gerenciamento global de usuários e monitoramento do sistema AuChou Pet.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                            <span class="block text-xs font-semibold text-slate-400 uppercase">Total de Usuários</span>
+                            <span class="text-3xl font-bold text-slate-800 mt-1 block">${users.length}</span>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                            <span class="block text-xs font-semibold text-slate-400 uppercase">Pets Publicados</span>
+                            <span class="text-3xl font-bold text-slate-800 mt-1 block">${posts.length}</span>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                            <span class="block text-xs font-semibold text-slate-400 uppercase">Status do Sistema</span>
+                            <span class="text-3xl font-bold text-emerald-600 mt-1 block flex items-center text-lg"><i class="fa-solid fa-circle text-xs mr-2 animate-pulse"></i> Online / MVP</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden p-6">
+                        <h3 class="font-bold text-lg text-slate-800 mb-4">Gerenciamento de Contas de Usuários</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="border-b border-slate-200 text-xs text-slate-400 uppercase bg-slate-50">
+                                        <th class="py-3 px-4">Nome</th>
+                                        <th class="py-3 px-4">E-mail</th>
+                                        <th class="py-3 px-4">Perfil</th>
+                                        <th class="py-3 px-4">Status</th>
+                                        <th class="py-3 px-4 text-right">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${usersHtml}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function toggleUserStatus(userId) {
+            let users = JSON.parse(localStorage.getItem('ap_users')) || [];
+            users = users.map(u => {
+                if (u.id === userId) {
+                    u.status = u.status === 'ativo' ? 'inativo' : 'ativo';
+                }
+                return u;
+            });
+            localStorage.setItem('ap_users', JSON.stringify(users));
+            showNotification('Status do usuário atualizado.', 'success');
+            renderAdminDashboard(document.getElementById('main-content'));
+        }
+
+        function renderProfile(container) {
+            const session = getSession();
+            const posts = JSON.parse(localStorage.getItem('ap_posts')) || [];
+            const userPosts = posts.filter(p => p.userId === session.id);
+
+            let myPostsHtml = userPosts.map(p => `
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs font-mono bg-white px-2 py-0.5 rounded border border-slate-200 text-slate-600">${p.protocol}</span>
+                            <h4 class="font-bold text-sm text-slate-800">${p.petName} (${p.statusPet})</h4>
+                        </div>
+                        <span class="text-xs text-slate-500 mt-1 block">${p.location} • Publicado em ${p.date}</span>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="updatePostStatusPrompt(${p.id})" class="bg-brand-100 text-brand-700 hover:bg-brand-200 px-3 py-1.5 rounded-lg text-xs font-semibold transition">Alterar Status</button>
+                        <button onclick="deletePost(${p.id})" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition">Excluir</button>
+                    </div>
+                </div>
+            `).join('');
+
+            container.innerHTML = `
+                <div class="max-w-3xl mx-auto space-y-6">
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 flex items-center space-x-6">
+                        <div class="w-20 h-20 bg-brand-500 rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-md">
+                            ${session.name.charAt(0)}
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-bold text-slate-800">${session.name}</h1>
+                            <p class="text-slate-500 text-sm">${session.email}</p>
+                            <span class="inline-block mt-2 px-3 py-1 bg-brand-50 text-brand-700 border border-brand-200 rounded-full text-xs font-semibold uppercase">Perfil: ${session.role === 'admin' ? 'Administrador' : 'Usuário Comum'}</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                        <h3 class="font-bold text-lg text-slate-800 mb-4">Minhas Publicações de Pets</h3>
+                        <div class="space-y-3">
+                            ${userPosts.length > 0 ? myPostsHtml : '<p class="text-slate-400 text-sm py-4 text-center">Você ainda não fez nenhuma publicação.</p>'}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function updatePostStatusPrompt(postId) {
+            let posts = JSON.parse(localStorage.getItem('ap_posts'));
+            const post = posts.find(p => p.id === postId);
+            if (!post) return;
+
+            const newStatus = prompt('Atualizar status para:\n1. Perdido\n2. Achado\n3. Reunido (Reunido com a Família)', post.statusPet);
+            if (newStatus && ['Perdido', 'Achado', 'Reunido'].includes(newStatus)) {
+                post.statusPet = newStatus;
+                localStorage.setItem('ap_posts', JSON.stringify(posts));
+                showNotification('Status atualizado com sucesso!', 'success');
+                renderProfile(document.getElementById('main-content'));
+            } else if (newStatus) {
+                showNotification('Status digitado inválido.', 'error');
+            }
+        }
+
+        function deletePost(postId) {
+            if (!confirm('Deseja realmente excluir esta publicação?')) return;
+            let posts = JSON.parse(localStorage.getItem('ap_posts'));
+            posts = posts.filter(p => p.id !== postId);
+            localStorage.setItem('ap_posts', JSON.stringify(posts));
+            showNotification('Publicação excluída.', 'success');
+            renderProfile(document.getElementById('main-content'));
+        }
+
+        function openChatWithPoster(posterId, postId) {
+            const session = getSession();
+            if (!session) {
+                showNotification('Faça login para conversar com quem publicou!', 'error');
+                router('login');
+                return;
+            }
+
+            if (session.id === posterId) {
+                showNotification('Esta publicação é sua!', 'error');
+                return;
+            }
+
+            let chats = JSON.parse(localStorage.getItem('ap_chats')) || [];
+            let chat = chats.find(c => c.postId === postId && c.participants.includes(session.id) && c.participants.includes(posterId));
+
+            if (!chat) {
+                chat = {
+                    chatId: `${session.id}_${posterId}_${postId}`,
+                    postId: postId,
+                    participants: [session.id, posterId],
+                    messages: [
+                        { sender: posterId, text: 'Olá! Vi seu contato na publicação do pet. Como posso ajudar?' }
+                    ]
+                };
+                chats.push(chat);
+                localStorage.setItem('ap_chats', JSON.stringify(chats));
+            }
+
+            router('chat', chat.chatId);
+        }
+
+        function renderChatView(container, chatId) {
+            const session = getSession();
+            let chats = JSON.parse(localStorage.getItem('ap_chats')) || [];
+            const chat = chats.find(c => c.chatId === chatId);
+
+            if (!chat) {
+                container.innerHTML = `<div class="text-center py-12 text-slate-400">Chat não encontrado.</div>`;
+                return;
+            }
+
+            const posts = JSON.parse(localStorage.getItem('ap_posts')) || [];
+            const post = posts.find(p => p.id === chat.postId);
+
+            let messagesHtml = chat.messages.map(m => {
+                const isMe = m.sender === session.id;
+                return `
+                    <div class="flex ${isMe ? 'justify-end' : 'justify-start'} mb-3">
+                        <div class="max-w-xs sm:max-w-md px-4 py-3 rounded-2xl text-sm ${isMe ? 'bg-brand-500 text-white rounded-br-none shadow-sm' : 'bg-white border border-slate-200 text-slate-800 rounded-bl-none'}">
+                            <p>${m.text}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = `
+                <div class="max-w-2xl mx-auto bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-[600px]">
+                    <div class="bg-slate-50 border-b border-slate-200 p-4 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-brand-100 rounded-full flex items-center justify-center font-bold text-brand-700">
+                                <i class="fa-solid fa-comments"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-sm text-slate-800">Chat sobre o Pet: ${post ? post.petName : 'Publicação'}</h3>
+                                <span class="text-xs text-slate-500">Canal direto AuChou Pet</span>
+                            </div>
+                        </div>
+                        <button onclick="router('feed')" class="text-xs font-semibold bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-1.5 rounded-lg transition">Voltar ao Feed</button>
+                    </div>
+
+                    <div id="chat-messages-container" class="flex-grow p-4 overflow-y-auto bg-slate-50/50 space-y-2">
+                        ${messagesHtml}
+                    </div>
+
+                    <div class="p-4 border-t border-slate-200 bg-white">
+                        <form onsubmit="sendMessage(event, '${chatId}')" class="flex space-x-2">
+                            <input type="text" id="chat-input-text" required placeholder="Digite sua mensagem..." class="flex-grow bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
+                            <button type="submit" class="bg-brand-500 hover:bg-brand-600 text-white px-5 py-3 rounded-xl font-semibold transition shadow-md shadow-brand-500/20">Enviar</button>
+                        </form>
+                    </div>
+                </div>
+            `;
+
+            const msgContainer = document.getElementById('chat-messages-container');
+            msgContainer.scrollTop = msgContainer.scrollHeight;
+        }
+
+        function sendMessage(e, chatId) {
+            e.preventDefault();
+            const session = getSession();
+            const input = document.getElementById('chat-input-text');
+            const text = input.value.trim();
+            if (!text) return;
+
+            let chats = JSON.parse(localStorage.getItem('ap_chats')) || [];
+            const chat = chats.find(c => c.chatId === chatId);
+            if (chat) {
+                chat.messages.push({ sender: session.id, text: text });
+                localStorage.setItem('ap_chats', JSON.stringify(chats));
+                input.value = '';
+                renderChatView(document.getElementById('main-content'), chatId);
+            }
+        }
+
+        window.onload = function() {
+            router('feed');
+        };
+    </script>
+</body>
+</html>

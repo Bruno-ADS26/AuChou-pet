@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuChou Pet - Rede Social de Pets Achados e Perdidos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- HEADER / NAVEGAÇÃO -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2 cursor-pointer" onclick="mudarAba('feed')">
+                <div class="bg-amber-500 text-white p-2 rounded-full shadow">
+                    <i class="fa-solid fa-paw text-xl"></i>
+                </div>
+                <span class="text-xl font-bold tracking-wide text-amber-600">AuChou <span class="text-slate-700">Pet</span></span>
+            </div>
+            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                <button onclick="mudarAba('feed')" class="hover:text-amber-600 transition">Início / Feed</button>
+                <button onclick="mudarAba('cadastrar')" class="hover:text-amber-600 transition flex items-center gap-1"><i class="fa-solid fa-plus-circle"></i> Publicar Pet</button>
+                <button id="navAdmin" onclick="mudarAba('admin')" class="hidden hover:text-amber-600 transition text-amber-600 font-semibold"><i class="fa-solid fa-shield-halved"></i> Painel Admin</button>
+            </nav>
+            <div id="authArea" class="flex items-center space-x-3">
+                <!-- Preenchido via JS -->
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="flex-grow max-w-6xl mx-auto px-4 py-6 w-full">
+
+        <!-- ABA: FEED (Rede Social) -->
+        <section id="aba-feed" class="space-y-6">
+            <div class="bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl p-6 text-white shadow-md flex flex-col md:flex-row justify-between items-center">
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold mb-2">Encontrou ou perdeu um pet?</h1>
+                    <p class="text-amber-100 text-sm md:text-base">Conectamos tutores e protetores através da nossa rede colaborativa.</p>
+                </div>
+                <button onclick="verificarLoginParaPostar()" class="mt-4 md:mt-0 bg-white text-amber-600 font-semibold px-5 py-2.5 rounded-xl shadow hover:bg-amber-50 transition">
+                    <i class="fa-solid fa-camera mr-2"></i> Publicar Animal
+                </button>
+            </div>
+
+            <!-- Filtros de Pesquisa -->
+            <div class="bg-white p-4 rounded-xl shadow-sm flex flex-col md:flex-row gap-3 justify-between items-center">
+                <div class="relative w-full md:w-96">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-3.5 text-slate-400"></i>
+                    <input type="text" id="inputBusca" oninput="filtrarPosts()" placeholder="Buscar por raça, local ou descrição..." class="w-full pl-10 pr-4 py-2 border rounded-lg text-sm focus:outline-none focus:border-amber-500">
+                </div>
+                <div class="flex gap-2 w-full md:w-auto">
+                    <select id="filtroStatus" onchange="filtrarPosts()" class="border rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-amber-500 w-full md:w-auto">
+                        <option value="todos">Todos os Status</option>
+                        <option value="Perdido">Perdido</option>
+                        <option value="Encontrado">Encontrado</option>
+                        <option value="Reunido">Reunido com a Família</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Grid de Posts -->
+            <div id="feedPosts" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Renderizado via JS -->
+            </div>
+        </section>
+
+        <!-- ABA: CADASTRAR PET -->
+        <section id="aba-cadastrar" class="hidden max-w-xl mx-auto bg-white p-8 rounded-2xl shadow-sm">
+            <h2 class="text-xl font-bold mb-6 text-slate-700 flex items-center gap-2">
+                <i class="fa-solid fa-bullhorn text-amber-500"></i> Publicar Pet Perdido ou Encontrado
+            </h2>
+            <form id="formPet" onsubmit="salvarPet(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Nome ou Apelido do Pet</label>
+                    <input type="text" id="petNome" required class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-amber-500" placeholder="Ex: Bob ou Desconhecido">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Situação</label>
+                        <select id="petStatus" class="w-full border rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-amber-500">
+                            <option value="Perdido">Perdido</option>
+                            <option value="Encontrado">Encontrado na Rua</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Espécie</label>
+                        <select id="petEspecie" class="w-full border rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-amber-500">
+                            <option value="Cachorro">Cachorro</option>
+                            <option value="Gato">Gato</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Localização (Bairro / Cidade)</label>
+                    <input type="text" id="petLocal" required class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-amber-500" placeholder="Ex: Centro, Itapetininga - SP">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Link da Foto (URL)</label>
+                    <input type="url" id="petFoto" required class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-amber-500" placeholder="Cole o link de uma imagem da internet">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Descrição e Detalhes</label>
+                    <textarea id="petDesc" rows="3" required class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-amber-500" placeholder="Coleira azul, muito dócil, visto pela última vez perto da praça..."></textarea>
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="mudarAba('feed')" class="px-4 py-2 border rounded-lg text-sm text-slate-600 hover:bg-slate-50">Cancelar</button>
+                    <button type="submit" class="bg-amber-500 text-white font-semibold px-6 py-2 rounded-lg text-sm hover:bg-amber-600 transition">Publicar</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- ABA: PAINEL ADMINISTRADOR -->
+        <section id="aba-admin" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-amber-500 flex justify-between items-center">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800"><i class="fa-solid fa-shield-halved text-amber-500 mr-2"></i> Painel do Administrador</h2>
+                    <p class="text-sm text-slate-500">Gerencie os usuários cadastrados e modere as publicações da rede.</p>
+                </div>
+                <span class="bg-amber-100 text-amber-700 text-xs font-bold px-3 py-1 rounded-full uppercase">Admin Master</span>
+            </div>
+
+            <!-- Métricas -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-white p-5 rounded-xl shadow-sm border">
+                    <span class="text-slate-400 text-xs uppercase font-bold">Total de Posts</span>
+                    <h3 id="statPosts" class="text-2xl font-black text-slate-700 mt-1">0</h3>
+                </div>
+                <div class="bg-white p-5 rounded-xl shadow-sm border">
+                    <span class="text-slate-400 text-xs uppercase font-bold">Usuários Cadastrados</span>
+                    <h3 id="statUsuarios" class="text-2xl font-black text-slate-700 mt-1">0</h3>
+                </div>
+                <div class="bg-white p-5 rounded-xl shadow-sm border">
+                    <span class="text-slate-400 text-xs uppercase font-bold">Pets Reunidos</span>
+                    <h3 id="statReunidos" class="text-2xl font-black text-emerald-600 mt-1">0</h3>
+                </div>
+            </div>
+
+            <!-- Listagem para Moderação -->
+            <div class="bg-white rounded-2xl shadow-sm p-6">
+                <h3 class="font-bold text-lg mb-4 text-slate-700">Gerenciamento de Publicações</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-50 text-slate-500 border-b">
+                            <tr>
+                                <th class="p-3">Protocolo</th>
+                                <th class="p-3">Pet</th>
+                                <th class="p-3">Autor</th>
+                                <th class="p-3">Status</th>
+                                <th class="p-3 text-right">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaAdminPosts" class="divide-y">
+                            <!-- Preenchido via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA: CHAT INTEGRADO -->
+        <section id="aba-chat" class="hidden max-w-2xl mx-auto bg-white rounded-2xl shadow-sm overflow-hidden border flex flex-col h-[600px]">
+            <div class="bg-amber-500 text-white p-4 flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <button onclick="mudarAba('feed')" class="text-white hover:bg-amber-600 p-2 rounded-full"><i class="fa-solid fa-arrow-left"></i></button>
+                    <div>
+                        <h3 id="chatTitulo" class="font-bold">Chat sobre o Pet</h3>
+                        <p id="chatSub" class="text-xs text-amber-100">Conversando com o autor da publicação</p>
+                    </div>
+                </div>
+            </div>
+            <div id="chatMensagens" class="flex-grow p-4 overflow-y-auto space-y-3 bg-slate-50 flex flex-col">
+                <!-- Mensagens via JS -->
+            </div>
+            <div class="p-3 bg-white border-t flex gap-2">
+                <input type="text" id="inputChatMsg" placeholder="Escreva sua mensagem..." class="flex-grow border rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-amber-500" onkeypress="if(event.key === 'F_ENTER' || event.key === 'Enter') enviarMensagem()">
+                <button onclick="enviarMensagem()" class="bg-amber-500 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-amber-600 transition"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL DE LOGIN / CADASTRO -->
+    <div id="modalAuth" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden z-50 flex justify-center items-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 relative">
+            <button onclick="fecharModalAuth()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <h3 id="modalTitulo" class="text-xl font-bold mb-4 text-slate-800">Entrar no AuChou Pet</h3>
+            <form id="formAuth" onsubmit="processarAuth(event)" class="space-y-4">
+                <div id="divNome" class="hidden">
+                    <label class="block text-sm font-medium mb-1">Seu Nome Completo</label>
+                    <input type="text" id="authNome" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-amber-500" placeholder="Bruno Oliveira">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">E-mail</label>
+                    <input type="email5" id="authEmail" required class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-amber-500" placeholder="seu-email@gmail.com">
+                    <p class="text-xs text-amber-600 mt-1">Dica: bruninho0861@gmail.com concede acesso Administrador.</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Senha</label>
+                    <input type="password" id="authSenha" required class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-amber-500" placeholder="••••••••">
+                </div>
+                <button type="submit" id="btnAuthSubmit" class="w-full bg-amber-500 text-white font-semibold py-2.5 rounded-lg text-sm hover:bg-amber-600 transition">Entrar</button>
+            </form>
+            <div class="mt-4 text-center text-sm">
+                <span id="alternarTexto" class="text-slate-500">Não tem uma conta?</span>
+                <button onclick="alternarModoAuth()" id="alternarBtn" class="text-amber-600 font-semibold ml-1 hover:underline">Cadastre-se</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RODAPÉ -->
+    <footer class="bg-white border-t mt-12 py-6 text-center text-sm text-slate-500">
+        <p>&copy; 2026 AuChou Pet - Projeto Integrador Fatec Itapetininga. Todos os direitos reservados.</p>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Inicialização de Dados LocalStorage
+        let usuarios = JSON.parse(localStorage.getItem('auchou_usuarios')) || [
+            { nome: "Administrador Master", email: "bruninho0861@gmail.com", senha: "123", tipo: "Administrador" }
+        ];
+        
+        let posts = JSON.parse(localStorage.getItem('auchou_posts')) || [
+            { id: "AP-2026-001", nome: "Mel", especie: "Cachorro", status: "Perdido", local: "Centro, Itapetininga - SP", foto: "https://images.unsplash.com/photo-1543466835-00a7907e9de1", desc: "Cadela Poodle de pequeno porte, usa coleira vermelha. Muito assustada.", autor: "Maria Silva", emailAutor: "maria@email.com", data: "08/09/2026" },
+            { id: "AP-2026-002", nome: "Simba", especie: "Gato", status: "Encontrado", local: "Vila Hungria, Itapetininga - SP", foto: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba", desc: "Gato amarelo encontrado miando bastante perto da padaria local.", autor: "João Pedro", emailAutor: "joao@email.com", data: "09/09/2026" }
+        ];
+
+        let mensagens = JSON.parse(localStorage.getItem('auchou_mensagens')) || [];
+        let usuarioLogado = JSON.parse(localStorage.getItem('auchou_usuario_logado')) || null;
+        let modoRegistro = false;
+        let chatAtualId = null;
+
+        function salvarDados() {
+            localStorage.setItem('auchou_usuarios', JSON.stringify(usuarios));
+            localStorage.setItem('auchou_posts', JSON.stringify(posts));
+            localStorage.setItem('auchou_mensagens', JSON.stringify(mensagens));
+            localStorage.setItem('auchou_usuario_logado', JSON.stringify(usuarioLogado));
+        }
+
+        // Navegação de Abas
+        function mudarAba(aba) {
+            ['feed', 'cadastrar', 'admin', 'chat'].forEach(a => {
+                document.getElementById(`aba-${a}`).classList.add('hidden');
+            });
+            document.getElementById(`aba-${aba}`).classList.remove('hidden');
+            if(aba === 'feed') renderizarFeed();
+            if(aba === 'admin') renderizarAdmin();
+            window.scrollTo(0,0);
+        }
+
+        // Renderização do Header Auth
+        function atualizarHeaderAuth() {
+            const area = document.getElementById('authArea');
+            const navAdmin = document.getElementById('navAdmin');
+            
+            if(usuarioLogado) {
+                if(usuarioLogado.tipo === 'Administrador') {
+                    navAdmin.classList.remove('hidden');
+                } else {
+                    navAdmin.classList.add('hidden');
+                }
+                area.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-semibold bg-amber-100 text-amber-700 px-2.5 py-1 rounded-full">${usuarioLogado.nome} (${usuarioLogado.tipo})</span>
+                        <button onclick="sair()" class="text-slate-500 hover:text-red-600 p-2 text-sm"><i class="fa-solid fa-power-off"></i></button>
+                    </div>
+                `;
+            } else {
+                navAdmin.classList.add('hidden');
+                area.innerHTML = `
+                    <button onclick="abrirModalAuth(false)" class="text-amber-600 font-semibold text-sm px-4 py-2 hover:bg-amber-50 rounded-lg transition">Entrar</button>
+                    <button onclick="abrirModalAuth(true)" class="bg-amber-500 text-white font-semibold text-sm px-4 py-2 rounded-lg hover:bg-amber-600 transition">Cadastrar</button>
+                `;
+            }
+        }
+
+        // Modal Auth
+        function abrirModalAuth(registro) {
+            modoRegistro = registro;
+            document.getElementById('divNome').classList.toggle('hidden', !registro);
+            document.getElementById('modalTitulo').innerText = registro ? 'Criar Conta - AuChou Pet' : 'Entrar no AuChou Pet';
+            document.getElementById('btnAuthSubmit').innerText = registro ? 'Cadastrar Conta' : 'Entrar';
+            document.getElementById('alternarTexto').innerText = registro ? 'Já possui uma conta?' : 'Não tem uma conta?';
+            document.getElementById('alternarBtn').innerText = registro ? 'Entrar' : 'Cadastre-se';
+            document.getElementById('modalAuth').classList.remove('hidden');
+        }
+
+        function fecharModalAuth() {
+            document.getElementById('modalAuth').classList.add('hidden');
+            document.getElementById('formAuth').reset();
+        }
+
+        function alternarModoAuth() {
+            abrirModalAuth(!modoRegistro);
+        }
+
+        function processarAuth(e) {
+            e.preventDefault();
+            const email = document.getElementById('authEmail').value.trim();
+            const senha = document.getElementById('authSenha').value.trim();
+            
+            if(modoRegistro) {
+                const nome = document.getElementById('authNome').value.trim();
+                if(usuarios.find(u => u.email === email)) {
+                    alert('Este e-mail já está cadastrado!');
+                    return;
+                }
+                // Regra estrita de Administrador por e-mail exclusivo
+                const tipo = (email === 'bruninho0861@gmail.com') ? 'Administrador' : 'Usuário Comum';
+                const novoUsuario = { nome, email, senha, tipo };
+                usuarios.push(novoUsuario);
+                usuarioLogado = novoUsuario;
+                salvarDados();
+                alert(`Conta criada com sucesso! Você está logado como ${tipo}.`);
+            } else {
+                const user = usuarios.find(u => u.email === email && u.senha === senha);
+                if(!user) {
+                    alert('E-mail ou senha incorretos!');
+                    return;
+                }
+                // Força atualização caso logue com o e-mail de admin
+                if(email === 'bruninho0861@gmail.com') user.tipo = 'Administrador';
+                usuarioLogado = user;
+                salvarDados();
+                alert(`Bem-vindo de volta, ${user.nome}!`);
+            }
+            fecharModalAuth();
+            atualizarHeaderAuth();
+            mudarAba('feed');
+        }
+
+        function sair() {
+            usuarioLogado = null;
+            salvarDados();
+            atualizarHeaderAuth();
+            mudarAba('feed');
+            alert('Você saiu da sua conta.');
+        }
+
+        function verificarLoginParaPostar() {
+            if(!usuarioLogado) {
+                alert('Você precisa fazer login para publicar um pet!');
+                abrirModalAuth(false);
+            } else {
+                mudarAba('cadastrar');
+            }
+        }
+
+        // Publicar Pet
+        function salvarPet(e) {
+            e.preventDefault();
+            const novoPost = {
+                id: `AP-2026-${Math.floor(100 + Math.random() * 900)}`,
+                nome: document.getElementById('petNome').value,
+                especie: document.getElementById('petEspecie').value,
+                status: document.getElementById('petStatus').value,
+                local: document.getElementById('petLocal').value,
+                foto: document.getElementById('petFoto').value,
+                desc: document.getElementById('petDesc').value,
+                autor: usuarioLogado.nome,
+                emailAutor: usuarioLogado.email,
+                data: new Date().toLocaleDateString('pt-BR')
+            };
+            posts.unshift(novoPost);
+            salvarDados();
+            document.getElementById('formPet').reset();
+            mudarAba('feed');
+            alert('Pet publicado com sucesso na rede!');
+        }
+
+        // Renderizar Feed
+        function renderizarFeed() {
+            const container = document.getElementById('feedPosts');
+            const busca = document.getElementById('inputBusca').value.toLowerCase();
+            const statusFiltro = document.getElementById('filtroStatus').value;
+
+            const filtrados = posts.filter(p => {
+                const matchBusca = p.nome.toLowerCase().includes(busca) || p.local.toLowerCase().includes(busca) || p.desc.toLowerCase().includes(busca);
+                const matchStatus = statusFiltro === 'todos' || p.status === statusFiltro;
+                return matchBusca && matchStatus;
+            });
+
+            if(filtrados.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400">Nenhum pet encontrado com esses filtros.</div>`;
+                return;
+            }
+
+            container.innerHTML = filtrados.map(p => `
+                <div class="bg-white rounded-2xl shadow-sm border overflow-hidden flex flex-col justify-between">
+                    <div>
+                        <div class="relative h-56 bg-slate-100">
+                            <img src="${p.foto}" alt="${p.nome}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1543466835-00a7907e9de1'">
+                            <span class="absolute top-3 right-3 text-xs font-bold px-3 py-1 rounded-full shadow ${p.status === 'Perdido' ? 'bg-red-500 text-white' : p.status === 'Encontrado' ? 'bg-amber-500 text-white' : 'bg-emerald-500 text-white'}">${p.status}</span>
+                        </div>
+                        <div class="p-4 space-y-2">
+                            <div class="flex justify-between items-start">
+                                <h3 class="font-bold text-lg text-slate-800">${p.nome}</h3>
+                                <span class="text-xs text-slate-400">Protocolo: ${p.id}</span>
+                            </div>
+                            <p class="text-xs text-slate-500 flex items-center gap-1"><i class="fa-solid fa-location-dot text-amber-500"></i> ${p.local}</p>
+                            <p class="text-sm text-slate-600 line-clamp-2">${p.desc}</p>
+                        </div>
+                    </div>
+                    <div class="p-4 border-t bg-slate-50 flex justify-between items-center text-xs">
+                        <span class="text-slate-500">Por: ${p.autor} (${p.data})</span>
+                        <button onclick="abrirChat('${p.id}')" class="bg-amber-500 text-white font-semibold px-3.5 py-2 rounded-lg hover:bg-amber-600 transition flex items-center gap-1.5"><i class="fa-solid fa-comments"></i> Falar com quem postou</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filtrarPosts() {
+            renderizarFeed();
+        }
+
+        // Sistema de Chat Integrado
+        function abrirChat(postId) {
+            if(!usuarioLogado) {
+                alert('Você precisa estar logado para iniciar uma conversa.');
+                abrirModalAuth(false);
+                return;
+            }
+            const post = posts.find(p => p.id === postId);
+            chatAtualId = postId;
+            document.getElementById('chatTitulo').innerText = `Chat sobre: ${post.nome} (${post.id})`;
+            document.getElementById('chatSub').innerText = `Publicado por ${post.autor}`;
+            renderizarMensagens();
+            mudarAba('chat');
+        }
+
+        function renderizarMensagens() {
+            const container = document.getElementById('chatMensagens');
+            const msgsDoPost = mensagens.filter(m => m.postId === chatAtualId);
+
+            if(msgsDoPost.length === 0) {
+                container.innerHTML = `<div class="text-center text-slate-400 my-auto text-sm">Nenhuma mensagem ainda. Envie uma mensagem para iniciar o contato!</div>`;
+                return;
+            }
+
+            container.innerHTML = msgsDoPost.map(m => `
+                <div class="flex flex-col ${m.remetente === usuarioLogado.email ? 'items-end' : 'items-start'}">
+                    <span class="text-[10px] text-slate-400 mb-0.5">${m.nomeRemetente}</span>
+                    <div class="max-w-xs md:max-w-md px-4 py-2 rounded-2xl text-sm ${m.remetente === usuarioLogado.email ? 'bg-amber-500 text-white rounded-br-none' : 'bg-white border text-slate-700 rounded-bl-none'}">
+                        ${m.texto}
+                    </div>
+                </div>
+            `).join('');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function enviarMensagem() {
+            const input = document.getElementById('inputChatMsg');
+            const texto = input.value.trim();
+            if(!texto) return;
+
+            mensagens.push({
+                postId: chatAtualId,
+                remetente: usuarioLogado.email,
+                nomeRemetente: usuarioLogado.nome,
+                texto: texto,
+                data: new Date().toLocaleTimeString()
+            });
+            salvarDados();
+            input.value = '';
+            renderizarMensagens();
+        }
+
+        // Painel Admin
+        function renderizarAdmin() {
+            if(!usuarioLogado || usuarioLogado.tipo !== 'Administrador') {
+                alert('Acesso restrito ao Administrador.');
+                mudarAba('feed');
+                return;
+            }
+
+            document.getElementById('statPosts').innerText = posts.length;
+            document.getElementById('statUsuarios').innerText = usuarios.length;
+            document.getElementById('statReunidos').innerText = posts.filter(p => p.status === 'Reunido').length;
+
+            const tbody = document.getElementById('tabelaAdminPosts');
+            tbody.innerHTML = posts.map(p => `
+                <tr class="hover:bg-slate-50 border-b">
+                    <td class="p-3 font-semibold text-amber-600">${p.id}</td>
+                    <td class="p-3 flex items-center gap-2">
+                        <img src="${p.foto}" class="w-8 h-8 rounded-full object-cover">
+                        <span>${p.nome}</span>
+                    </td>
+                    <td class="p-3 text-slate-500">${p.autor}</td>
+                    <td class="p-3">
+                        <select onchange="mudarStatusPost('${p.id}', this.value)" class="border rounded px-2 py-1 text-xs bg-white">
+                            <option value="Perdido" ${p.status === 'Perdido' ? 'selected' : ''}>Perdido</option>
+                            <option value="Encontrado" ${p.status === 'Encontrado' ? 'selected' : ''}>Encontrado</option>
+                            <option value="Reunido" ${p.status === 'Reunido' ? 'selected' : ''}>Reunido com a Família</option>
+                        </select>
+                    </td>
+                    <td class="p-3 text-right">
+                        <button onclick="deletarPost('${p.id}')" class="text-red-500 hover:text-red-700 px-2 py-1 text-xs font-semibold"><i class="fa-solid fa-trash"></i> Excluir</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function mudarStatusPost(id, novoStatus) {
+            const p = posts.find(post => post.id === id);
+            if(p) {
+                p.status = novoStatus;
+                salvarDados();
+                renderizarAdmin();
+            }
+        }
+
+        function deletarPost(id) {
+            if(confirm('Tem certeza que deseja excluir esta publicação?')) {
+                posts = posts.filter(p => p.id !== id);
+                salvarDados();
+                renderizarAdmin();
+            }
+        }
+
+        // Execução inicial ao carregar a página
+        atualizarHeaderAuth();
+        renderizarFeed();
+    </script>
+</body>
+</html>
